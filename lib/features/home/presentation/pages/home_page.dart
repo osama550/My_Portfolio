@@ -5,15 +5,21 @@ import 'package:my_portfolio/core/theme/breakpoints.dart';
 import 'package:my_portfolio/core/utils/functions/cv_downloader.dart';
 import 'package:my_portfolio/core/utils/functions/url_launcher.dart';
 import 'package:my_portfolio/core/widgets/badge_divider.dart';
+import 'package:my_portfolio/features/home/presentation/widgets/about_me/about_me_section.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/animated_profile.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/bouncing_arrow.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/hero_intro_text.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_app_bar.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_drawer.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   static const List<String> _navItems = [
     'About',
     'Experience',
@@ -22,10 +28,32 @@ class HomePage extends StatelessWidget {
     'Contact',
   ];
 
-  void _handleNavItemTap(BuildContext context, int index) {
+  final Map<String, GlobalKey> _sectionKeys = {
+    'About': GlobalKey(),
+    'Experience': GlobalKey(),
+    'Skills': GlobalKey(),
+    'Projects': GlobalKey(),
+    'Contact': GlobalKey(),
+  };
+
+  void _scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+  }
+
+  void _handleNavItemTap(int index) {
     final sectionName = _navItems[index];
     log('Navigate to section: $sectionName');
-    // TODO: Implement scroll-to-section logic (e.g., using ScrollController or GlobalKeys)
+    final key = _sectionKeys[sectionName];
+    if (key != null) {
+      _scrollToSection(key);
+    }
   }
 
   @override
@@ -36,12 +64,12 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: ResponsiveAppBar(
         navItems: _navItems,
-        onNavItemTap: (index) => _handleNavItemTap(context, index),
+        onNavItemTap: _handleNavItemTap,
       ),
       endDrawer: context.isMobile
           ? ResponsiveDrawer(
               navItems: _navItems,
-              onNavItemTap: (index) => _handleNavItemTap(context, index),
+              onNavItemTap: _handleNavItemTap,
             )
           : null,
       body: SafeArea(
@@ -53,10 +81,10 @@ class HomePage extends StatelessWidget {
             ),
             child: Container(
               constraints: const BoxConstraints(maxWidth: 1200),
-              child: isDesktop
-                  ? Column(
-                      children: [
-                        Row(
+              child: Column(
+                children: [
+                  isDesktop
+                      ? Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(
@@ -89,55 +117,53 @@ class HomePage extends StatelessWidget {
                               child: Center(child: AnimatedProfileWidget()),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 24),
-                        BouncingArrow(
-                          onTap: () {
-                            log('Arrow pressed');
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                        BadgeDivider(),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Center(child: AnimatedProfileWidget()),
-                        const SizedBox(height: 48),
-                        HeroIntroText(
-                          onViewProjectsPressed: () {
-                            log('View Projects pressed');
-                          },
-                          onDownloadCVPressed: () async {
-                            await downloadAndSaveCV();
-                          },
-                          onGetInTouchPressed: () {
-                            log('Get In Touch pressed');
-                          },
-                          onGithubPressed: () async {
-                            await launchExternalUrl(
-                              'https://github.com/osama550',
-                            );
-                          },
-                          onLinkedinPressed: () async {
-                            await launchExternalUrl(
-                              'https://www.linkedin.com/in/osama-kamel-elsalamony',
-                            );
-                          },
-                        ),
-
-                        const SizedBox(height: 24),
-                        BouncingArrow(
-                          onTap: () {
-                            log('Arrow pressed');
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                        BadgeDivider(),
-                      ],
-                    ),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Center(child: AnimatedProfileWidget()),
+                            const SizedBox(height: 48),
+                            HeroIntroText(
+                              onViewProjectsPressed: () {
+                                log('View Projects pressed');
+                              },
+                              onDownloadCVPressed: () async {
+                                await downloadAndSaveCV();
+                              },
+                              onGetInTouchPressed: () {
+                                log('Get In Touch pressed');
+                              },
+                              onGithubPressed: () async {
+                                await launchExternalUrl(
+                                  'https://github.com/osama550',
+                                  );
+                                },
+                                onLinkedinPressed: () async {
+                                  await launchExternalUrl(
+                                    'https://www.linkedin.com/in/osama-kamel-elsalamony',
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                  const SizedBox(height: 24),
+                  BouncingArrow(
+                    onTap: () {
+                      final key = _sectionKeys['About'];
+                      if (key != null) {
+                        _scrollToSection(key);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  const BadgeDivider(),
+                  const SizedBox(height: 60),
+                  AboutMeSection(key: _sectionKeys['About']),
+                  const SizedBox(height: 60),
+                  const BadgeDivider(),
+                ],
+              ),
             ),
           ),
         ),
