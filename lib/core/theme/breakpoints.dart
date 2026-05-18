@@ -8,12 +8,17 @@ class Breakpoints {
 
   static DeviceType of(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    if (width < mobile) return DeviceType.mobile;
-    if (width < tablet) return DeviceType.tablet;
-    if (width < desktop) return DeviceType.desktop;
-
-    return DeviceType.mobile;
+    if (width < tablet) return DeviceType.mobile;
+    if (width < desktop) return DeviceType.tablet;
+    return DeviceType.desktop;
   }
 }
 
 enum DeviceType { mobile, tablet, desktop }
+
+extension ResponsiveContextExtensions on BuildContext {
+  DeviceType get deviceType => Breakpoints.of(this);
+  bool get isMobile => deviceType == DeviceType.mobile;
+  bool get isTablet => deviceType == DeviceType.tablet;
+  bool get isDesktop => deviceType == DeviceType.desktop;
+}
