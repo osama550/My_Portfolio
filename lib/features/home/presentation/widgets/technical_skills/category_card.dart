@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
-import 'skill_category.dart';
+import 'package:my_portfolio/features/home/data/models/technical_skill_model.dart';
 import 'skill_chip.dart';
 
 class CategoryCard extends StatefulWidget {
-  final SkillCategory category;
+  final TechnicalSkillModel category;
 
   const CategoryCard({super.key, required this.category});
 

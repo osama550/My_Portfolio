@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
 import 'package:my_portfolio/core/widgets/header_title_sections.dart';
+import 'package:my_portfolio/features/home/data/models/about_me_model.dart';
+
+import 'about_me_card.dart';
 
 class AboutMeSection extends StatelessWidget {
   const AboutMeSection({super.key});
@@ -14,8 +17,8 @@ class AboutMeSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section Header
-        Align(
-          child: const HeaderTitleSections(
+        const Align(
+          child: HeaderTitleSections(
             title1: 'About ',
             title2: 'Me',
             subtitle: 'Get to know me better',
@@ -24,30 +27,23 @@ class AboutMeSection extends StatelessWidget {
         const SizedBox(height: 32),
 
         // About Me Description Paragraphs
-        Text(
-          'I’m a Flutter Developer with 2+ years of experience building scalable SaaS products across mobile and web. I\'m passionate about translating complex business requirements into elegant, high-performance applications that users love.',
-          style: typography.bodyLargeRegular.copyWith(
-            color: ColorsPalette.textSecondary,
-            height: 1.6,
-          ),
+        ...aboutMeData.paragraphs.asMap().entries.map(
+          (entry) {
+            final index = entry.key;
+            final paragraph = entry.value;
+            final isLast = index == aboutMeData.paragraphs.length - 1;
+            return Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 48.0 : 24.0),
+              child: Text(
+                paragraph,
+                style: typography.bodyLargeRegular.copyWith(
+                  color: ColorsPalette.textSecondary,
+                  height: 1.6,
+                ),
+              ),
+            );
+          },
         ),
-        const SizedBox(height: 24),
-        Text(
-          'I specialize in Clean Architecture, BLoC state management, and modular system design to ensure codebases remain clean, scalable, and easy to maintain. I have a proven track record of delivering enterprise-grade mobile and web solutions with robust architectures.',
-          style: typography.bodyLargeRegular.copyWith(
-            color: ColorsPalette.textSecondary,
-            height: 1.6,
-          ),
-        ),
-        const SizedBox(height: 24),
-        Text(
-          'I’m deeply committed to writing testable, maintainable code using SOLID principles and Design Patterns, delivering stunning apps for both iOS and Android from a single codebase. I love collaborating on modern tech stacks and bringing scalable products to life.',
-          style: typography.bodyLargeRegular.copyWith(
-            color: ColorsPalette.textSecondary,
-            height: 1.6,
-          ),
-        ),
-        const SizedBox(height: 48),
 
         // Responsive Grid/List of Cards
         Column(
@@ -57,38 +53,30 @@ class AboutMeSection extends StatelessWidget {
               children: [
                 Expanded(
                   child: AboutMeCard(
-                    icon: Icons.smartphone_rounded,
-                    title: 'Mobile First',
-                    description: 'Cross-platform apps for iOS & Android',
+                    strength: aboutMeData.strengths[0],
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: AboutMeCard(
-                    icon: Icons.code_rounded,
-                    title: 'Clean Code',
-                    description: 'Maintainable, scalable architecture',
+                    strength: aboutMeData.strengths[1],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: AboutMeCard(
-                    icon: Icons.palette_outlined,
-                    title: 'UI/UX Focus',
-                    description: 'Beautiful, intuitive interfaces',
+                    strength: aboutMeData.strengths[2],
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: AboutMeCard(
-                    icon: Icons.bolt_rounded,
-                    title: 'Performance',
-                    description: 'Optimized for speed & efficiency',
+                    strength: aboutMeData.strengths[3],
                   ),
                 ),
               ],
@@ -96,88 +84,6 @@ class AboutMeSection extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class AboutMeCard extends StatefulWidget {
-  final IconData icon;
-  final String title;
-  final String description;
-
-  const AboutMeCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  State<AboutMeCard> createState() => _AboutMeCardState();
-}
-
-class _AboutMeCardState extends State<AboutMeCard> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final typography = context.typography;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-        transform: _isHovered
-            ? Matrix4.translationValues(0, -6, 0)
-            : Matrix4.identity(),
-        padding: const EdgeInsets.all(24.0),
-        decoration: BoxDecoration(
-          color: ColorsPalette.card,
-          borderRadius: BorderRadius.circular(16.0),
-          border: Border.all(
-            color: _isHovered ? ColorsPalette.primary : ColorsPalette.border,
-            width: 1.5,
-          ),
-          boxShadow: [
-            if (_isHovered)
-              BoxShadow(
-                color: ColorsPalette.primary.withValues(alpha: 0.08),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              )
-            else
-              BoxShadow(
-                color: ColorsPalette.shadow.withValues(alpha: 0.02),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(widget.icon, color: ColorsPalette.primary, size: 32),
-            const SizedBox(height: 16),
-            Text(
-              widget.title,
-              style: typography.bodyLargeBold.copyWith(
-                color: ColorsPalette.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.description,
-              style: typography.bodyMediumRegular.copyWith(
-                color: ColorsPalette.textSecondary,
-                height: 1.4,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

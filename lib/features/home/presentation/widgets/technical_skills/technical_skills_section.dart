@@ -1,82 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/breakpoints.dart';
 import 'package:my_portfolio/core/widgets/header_title_sections.dart';
+import 'package:my_portfolio/features/home/data/models/technical_skill_model.dart';
 
 import 'category_card.dart';
-import 'skill_category.dart';
 
 class TechnicalSkillsSection extends StatelessWidget {
   const TechnicalSkillsSection({super.key});
-
-  static const List<SkillCategory> _categories = [
-    SkillCategory(
-      title: 'Mobile Development',
-      icon: Icons.smartphone_rounded,
-      skills: [
-        'Flutter',
-        'Dart',
-        'Clean Architecture',
-        'MVVM',
-        'BLoC/Cubit',
-        'GoRouter',
-        'SOLID',
-        'OOP',
-        'Design Patterns',
-      ],
-    ),
-    SkillCategory(
-      title: 'Backend & Integration',
-      icon: Icons.cloud_queue_rounded,
-      skills: [
-        'REST APIs',
-        'Dio',
-        'WebSockets',
-        'Firebase',
-        'Supabase',
-        'Google Maps',
-        'OneSignal',
-        'Payment Gateways',
-        'ElevenLabs',
-      ],
-    ),
-    SkillCategory(
-      title: 'State Management & Storage',
-      icon: Icons.storage_rounded,
-      skills: ['Hive', 'SharedPreferences', 'FlutterSecureStorage'],
-    ),
-    SkillCategory(
-      title: 'Testing, DevOps & Tools',
-      icon: Icons.construction_rounded,
-      skills: [
-        'Unit Testing',
-        'Widget Testing',
-        'Mockito',
-        'Git',
-        'GitHub Actions',
-        'Jenkins',
-        'Fastlane',
-        'Sentry',
-        'Postman',
-        'Jira',
-      ],
-    ),
-    SkillCategory(
-      title: 'UI/UX & App Features',
-      icon: Icons.palette_outlined,
-      skills: [
-        'Responsive Design',
-        'Theming',
-        'Localization',
-        'Deep Linking',
-        'Figma',
-      ],
-    ),
-    SkillCategory(
-      title: 'Computer Science & Problem Solving',
-      icon: Icons.psychology_outlined,
-      skills: ['Data Structures', 'Algorithms', 'Problem Solving'],
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +22,9 @@ class TechnicalSkillsSection extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                CategoryCard(category: _categories[0]),
+                CategoryCard(category: technicalSkills[0]),
                 const SizedBox(height: 24),
-                CategoryCard(category: _categories[2]),
+                CategoryCard(category: technicalSkills[2]),
               ],
             ),
           ),
@@ -102,9 +32,9 @@ class TechnicalSkillsSection extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                CategoryCard(category: _categories[1]),
+                CategoryCard(category: technicalSkills[1]),
                 const SizedBox(height: 24),
-                CategoryCard(category: _categories[4]),
+                CategoryCard(category: technicalSkills[4]),
               ],
             ),
           ),
@@ -112,9 +42,9 @@ class TechnicalSkillsSection extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                CategoryCard(category: _categories[3]),
+                CategoryCard(category: technicalSkills[3]),
                 const SizedBox(height: 24),
-                CategoryCard(category: _categories[5]),
+                CategoryCard(category: technicalSkills[5]),
               ],
             ),
           ),
@@ -128,11 +58,11 @@ class TechnicalSkillsSection extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                CategoryCard(category: _categories[0]),
+                CategoryCard(category: technicalSkills[0]),
                 const SizedBox(height: 24),
-                CategoryCard(category: _categories[2]),
+                CategoryCard(category: technicalSkills[2]),
                 const SizedBox(height: 24),
-                CategoryCard(category: _categories[4]),
+                CategoryCard(category: technicalSkills[4]),
               ],
             ),
           ),
@@ -140,11 +70,11 @@ class TechnicalSkillsSection extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                CategoryCard(category: _categories[1]),
+                CategoryCard(category: technicalSkills[1]),
                 const SizedBox(height: 24),
-                CategoryCard(category: _categories[3]),
+                CategoryCard(category: technicalSkills[3]),
                 const SizedBox(height: 24),
-                CategoryCard(category: _categories[5]),
+                CategoryCard(category: technicalSkills[5]),
               ],
             ),
           ),
@@ -153,7 +83,7 @@ class TechnicalSkillsSection extends StatelessWidget {
     } else {
       // Mobile: 1 column layout
       content = Column(
-        children: _categories
+        children: technicalSkills
             .map(
               (category) => Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),

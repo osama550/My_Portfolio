@@ -9,9 +9,11 @@ import 'package:my_portfolio/features/home/presentation/widgets/about_me/about_m
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/animated_profile.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/bouncing_arrow.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/hero_intro_text.dart';
+import 'package:my_portfolio/features/home/presentation/widgets/contact/contact_section.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_app_bar.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_drawer.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/technical_skills/technical_skills_section.dart';
+import 'package:my_portfolio/features/home/presentation/widgets/work_experience/work_experience_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -98,7 +100,10 @@ class _HomePageState extends State<HomePage> {
                                   await downloadAndSaveCV();
                                 },
                                 onGetInTouchPressed: () {
-                                  log('Get In Touch pressed');
+                                  final key = _sectionKeys['Contact'];
+                                  if (key != null) {
+                                    _scrollToSection(key);
+                                  }
                                 },
                                 onGithubPressed: () async {
                                   await launchExternalUrl(
@@ -133,21 +138,24 @@ class _HomePageState extends State<HomePage> {
                                 await downloadAndSaveCV();
                               },
                               onGetInTouchPressed: () {
-                                log('Get In Touch pressed');
+                                final key = _sectionKeys['Contact'];
+                                if (key != null) {
+                                  _scrollToSection(key);
+                                }
                               },
                               onGithubPressed: () async {
                                 await launchExternalUrl(
                                   'https://github.com/osama550',
-                                  );
-                                },
-                                onLinkedinPressed: () async {
-                                  await launchExternalUrl(
-                                    'https://www.linkedin.com/in/osama-kamel-elsalamony',
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
+                                );
+                              },
+                              onLinkedinPressed: () async {
+                                await launchExternalUrl(
+                                  'https://www.linkedin.com/in/osama-kamel-elsalamony',
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                   const SizedBox(height: 24),
                   BouncingArrow(
                     onTap: () {
@@ -167,6 +175,13 @@ class _HomePageState extends State<HomePage> {
                   TechnicalSkillsSection(key: _sectionKeys['Skills']),
                   const SizedBox(height: 60),
                   const BadgeDivider(),
+                  const SizedBox(height: 60),
+                  WorkExperienceSection(key: _sectionKeys['Experience']),
+                  const SizedBox(height: 60),
+                  const BadgeDivider(),
+                  const SizedBox(height: 60),
+                  ContactSection(key: _sectionKeys['Contact']),
+                  const SizedBox(height: 60),
                 ],
               ),
             ),
