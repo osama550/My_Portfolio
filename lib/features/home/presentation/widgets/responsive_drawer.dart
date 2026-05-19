@@ -16,8 +16,8 @@ class ResponsiveDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemIcons = {
       'About': Icons.person_outline_rounded,
-      'Experience': Icons.work_outline_rounded,
       'Skills': Icons.code_rounded,
+      'Experience': Icons.work_outline_rounded,
       'Projects': Icons.palette_outlined,
       'Contact': Icons.mail_outline_rounded,
     };

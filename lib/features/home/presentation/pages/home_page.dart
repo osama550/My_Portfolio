@@ -11,6 +11,7 @@ import 'package:my_portfolio/features/home/presentation/widgets/hero_section/bou
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/hero_intro_text.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_app_bar.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_drawer.dart';
+import 'package:my_portfolio/features/home/presentation/widgets/technical_skills/technical_skills_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,16 +23,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const List<String> _navItems = [
     'About',
-    'Experience',
     'Skills',
+    'Experience',
     'Projects',
     'Contact',
   ];
 
   final Map<String, GlobalKey> _sectionKeys = {
     'About': GlobalKey(),
-    'Experience': GlobalKey(),
     'Skills': GlobalKey(),
+    'Experience': GlobalKey(),
     'Projects': GlobalKey(),
     'Contact': GlobalKey(),
   };
@@ -160,6 +161,10 @@ class _HomePageState extends State<HomePage> {
                   const BadgeDivider(),
                   const SizedBox(height: 60),
                   AboutMeSection(key: _sectionKeys['About']),
+                  const SizedBox(height: 60),
+                  const BadgeDivider(),
+                  const SizedBox(height: 60),
+                  TechnicalSkillsSection(key: _sectionKeys['Skills']),
                   const SizedBox(height: 60),
                   const BadgeDivider(),
                 ],

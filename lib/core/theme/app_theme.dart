@@ -16,7 +16,7 @@ class AppTheme {
       fontFamily: 'Poppins',
       extensions: [typography],
       primaryColor: ColorsPalette.primary,
-      scaffoldBackgroundColor: ColorsPalette.white,
+      scaffoldBackgroundColor: ColorsPalette.scaffoldBackground,
       cardColor: ColorsPalette.card,
       dividerColor: ColorsPalette.divider,
       shadowColor: ColorsPalette.shadow,

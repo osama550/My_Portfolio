@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
+import 'package:my_portfolio/core/widgets/header_title_sections.dart';
 
 class AboutMeSection extends StatelessWidget {
   const AboutMeSection({super.key});
@@ -13,23 +14,12 @@ class AboutMeSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section Header
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'About Me',
-              style: typography.h3Bold.copyWith(color: ColorsPalette.primary),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              width: 70,
-              height: 4,
-              decoration: BoxDecoration(
-                color: ColorsPalette.primary,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ],
+        Align(
+          child: const HeaderTitleSections(
+            title1: 'About ',
+            title2: 'Me',
+            subtitle: 'Get to know me better',
+          ),
         ),
         const SizedBox(height: 32),
 

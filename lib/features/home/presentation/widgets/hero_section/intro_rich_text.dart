@@ -19,8 +19,9 @@ class IntroRichText extends StatelessWidget {
         ),
         children: [
           TextSpan(text: "Hi, I'm \n", style: typography.h4Bold),
+          TextSpan(text: 'Osama ', style: typography.h2Bold),
           TextSpan(
-            text: 'Osama Kamel\n',
+            text: 'Kamel\n',
             style: typography.h2Bold.copyWith(color: ColorsPalette.primary),
           ),
           TextSpan(text: 'Flutter Developer', style: typography.h5Bold),
