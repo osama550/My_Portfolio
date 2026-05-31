@@ -43,9 +43,9 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
     };
 
     final double imageSize = switch (deviceType) {
-      DeviceType.desktop => 260.0,
-      DeviceType.tablet => 210.0,
-      DeviceType.mobile => 160.0,
+      DeviceType.desktop => 280.0,
+      DeviceType.tablet => 230.0,
+      DeviceType.mobile => 180.0,
     };
 
     final double badge1Top = switch (deviceType) {
@@ -142,7 +142,7 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('assets/images/my_image.jpeg'),
+                          image: AssetImage('assets/images/my_image2.jpeg'),
                           fit: BoxFit.cover,
                         ),
                       ),

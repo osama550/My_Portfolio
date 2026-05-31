@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
 import 'package:my_portfolio/features/home/data/models/technical_skill_model.dart';
+
 import 'skill_chip.dart';
 
 class CategoryCard extends StatefulWidget {
@@ -30,7 +31,7 @@ class _CategoryCardState extends State<CategoryCard> {
             ? Matrix4.translationValues(0, -6, 0)
             : Matrix4.identity(),
         width: double.infinity,
-        padding: const EdgeInsets.all(28.0),
+        padding: const EdgeInsets.all(24.0),
         decoration: BoxDecoration(
           color: ColorsPalette.card,
           borderRadius: BorderRadius.circular(24.0),

@@ -6,10 +6,11 @@ import 'package:my_portfolio/core/utils/functions/cv_downloader.dart';
 import 'package:my_portfolio/core/utils/functions/url_launcher.dart';
 import 'package:my_portfolio/core/widgets/badge_divider.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/about_me/about_me_section.dart';
+import 'package:my_portfolio/features/home/presentation/widgets/contact/contact_section.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/animated_profile.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/bouncing_arrow.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/hero_section/hero_intro_text.dart';
-import 'package:my_portfolio/features/home/presentation/widgets/contact/contact_section.dart';
+import 'package:my_portfolio/features/home/presentation/widgets/projects/projects_section.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_app_bar.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/responsive_drawer.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/technical_skills/technical_skills_section.dart';
@@ -79,7 +80,7 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: isDesktop ? 80.0 : 24.0,
+              horizontal: isDesktop ? 80.0 : 12.0,
               vertical: 40.0,
             ),
             child: Container(
@@ -177,6 +178,10 @@ class _HomePageState extends State<HomePage> {
                   const BadgeDivider(),
                   const SizedBox(height: 60),
                   WorkExperienceSection(key: _sectionKeys['Experience']),
+                  const SizedBox(height: 60),
+                  const BadgeDivider(),
+                  const SizedBox(height: 60),
+                  ProjectsSection(key: _sectionKeys['Projects']),
                   const SizedBox(height: 60),
                   const BadgeDivider(),
                   const SizedBox(height: 60),
