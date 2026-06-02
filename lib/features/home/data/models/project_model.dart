@@ -183,6 +183,8 @@ const List<ProjectModel> projectsList = [
       'Deep Linking',
       'Vehicle Comparison',
       'Interactive Catalog',
+      'Deep Linking',
+      'Push Notifications',
     ],
     bullets: [],
   ),

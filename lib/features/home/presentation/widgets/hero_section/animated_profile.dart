@@ -142,7 +142,7 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('assets/images/my_image2.jpeg'),
+                          image: AssetImage('assets/images/my_image3.jpeg'),
                           fit: BoxFit.cover,
                         ),
                       ),

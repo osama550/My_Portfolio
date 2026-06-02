@@ -95,7 +95,10 @@ class _HomePageState extends State<HomePage> {
                               flex: 5,
                               child: HeroIntroText(
                                 onViewProjectsPressed: () {
-                                  log('View Projects pressed');
+                                  final key = _sectionKeys['Projects'];
+                                  if (key != null) {
+                                    _scrollToSection(key);
+                                  }
                                 },
                                 onDownloadCVPressed: () async {
                                   await downloadAndSaveCV();
@@ -133,7 +136,10 @@ class _HomePageState extends State<HomePage> {
                             const SizedBox(height: 48),
                             HeroIntroText(
                               onViewProjectsPressed: () {
-                                log('View Projects pressed');
+                                final key = _sectionKeys['Projects'];
+                                if (key != null) {
+                                  _scrollToSection(key);
+                                }
                               },
                               onDownloadCVPressed: () async {
                                 await downloadAndSaveCV();
