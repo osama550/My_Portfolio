@@ -46,7 +46,7 @@ const List<ProjectModel> projectsList = [
         'Shalehi is a chalet booking and reservation app that enables users to discover, reserve, and manage chalet bookings seamlessly through an immersive mobile experience.',
     categoryIcon: Icons.house_rounded,
     imagePathPrefix: 'assets/images/shalehi/',
-    imageExtension: '.PNG', // Shalehi images have uppercase .PNG
+    imageExtension: '.png', // Shalehi images have uppercase .PNG
     imageCount: 22,
     // googlePlayUrl: 'https://play.google.com/store',
     // appStoreUrl: 'https://apps.apple.com/app-store',
@@ -116,7 +116,7 @@ const List<ProjectModel> projectsList = [
         'A comprehensive salon management and booking platform that allows users to seamlessly schedule appointments, select their preferred specialists, and choose convenient dates and times. It also features an integrated e-commerce section for users to explore and purchase beauty products directly.',
     categoryIcon: Icons.spa_rounded,
     imagePathPrefix: 'assets/images/salons/',
-    imageExtension: '.PNG',
+    imageExtension: '.png',
     imageCount: 16,
     tags: [
       'Appointment Booking',
@@ -155,7 +155,7 @@ const List<ProjectModel> projectsList = [
         'A modern restaurant platform designed to simplify dining and food ordering, enabling users to browse interactive menus, customize orders, and track delivery or pickup orders in real time through a seamless user experience.',
     categoryIcon: Icons.restaurant_rounded,
     imagePathPrefix: 'assets/images/resturants/',
-    imageExtension: '.PNG',
+    imageExtension: '.png',
     imageCount: 14,
     tags: [
       'Food Delivery',
@@ -176,7 +176,7 @@ const List<ProjectModel> projectsList = [
         'A digital car showroom experience that provides detailed vehicle specifications, high-quality imagery, and comprehensive details. It features a quick QR code scanning functionality that enables users to instantly access and compare multiple cars side-by-side.',
     categoryIcon: Icons.directions_car_rounded,
     imagePathPrefix: 'assets/images/cars_show_room/',
-    imageExtension: '.PNG',
+    imageExtension: '.png',
     imageCount: 13,
     tags: [
       'QR Code Scanner',

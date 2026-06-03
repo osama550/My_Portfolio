@@ -16,10 +16,7 @@ class AboutMeModel {
   final List<String> paragraphs;
   final List<AboutMeStrengthModel> strengths;
 
-  const AboutMeModel({
-    required this.paragraphs,
-    required this.strengths,
-  });
+  const AboutMeModel({required this.paragraphs, required this.strengths});
 }
 
 const AboutMeModel aboutMeData = AboutMeModel(
