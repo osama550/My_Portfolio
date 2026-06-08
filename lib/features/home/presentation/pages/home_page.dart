@@ -40,6 +40,13 @@ class _HomePageState extends State<HomePage> {
     'Contact': GlobalKey(),
   };
 
+  void _scrollToSectionByName(String name) {
+    final key = _sectionKeys[name];
+    if (key != null) {
+      _scrollToSection(key);
+    }
+  }
+
   void _scrollToSection(GlobalKey key) {
     final context = key.currentContext;
     if (context != null) {
@@ -54,16 +61,23 @@ class _HomePageState extends State<HomePage> {
   void _handleNavItemTap(int index) {
     final sectionName = _navItems[index];
     log('Navigate to section: $sectionName');
-    final key = _sectionKeys[sectionName];
-    if (key != null) {
-      _scrollToSection(key);
-    }
+    _scrollToSectionByName(sectionName);
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceType = context.deviceType;
     final isDesktop = deviceType == DeviceType.desktop;
+
+    final heroIntroText = HeroIntroText(
+      onViewProjectsPressed: () => _scrollToSectionByName('Projects'),
+      onDownloadCVPressed: () => downloadAndSaveCV(),
+      onGetInTouchPressed: () => _scrollToSectionByName('Contact'),
+      onGithubPressed: () => launchExternalUrl('https://github.com/osama550'),
+      onLinkedinPressed: () => launchExternalUrl(
+        'https://www.linkedin.com/in/osama-kamel-elsalamony',
+      ),
+    );
 
     return Scaffold(
       appBar: ResponsiveAppBar(
@@ -83,118 +97,58 @@ class _HomePageState extends State<HomePage> {
               horizontal: isDesktop ? 80.0 : 12.0,
               vertical: 40.0,
             ),
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 1200),
-              child: Column(
-                children: [
-                  isDesktop
-                      ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: HeroIntroText(
-                                onViewProjectsPressed: () {
-                                  final key = _sectionKeys['Projects'];
-                                  if (key != null) {
-                                    _scrollToSection(key);
-                                  }
-                                },
-                                onDownloadCVPressed: () async {
-                                  await downloadAndSaveCV();
-                                },
-                                onGetInTouchPressed: () {
-                                  final key = _sectionKeys['Contact'];
-                                  if (key != null) {
-                                    _scrollToSection(key);
-                                  }
-                                },
-                                onGithubPressed: () async {
-                                  await launchExternalUrl(
-                                    'https://github.com/osama550',
-                                  );
-                                },
-                                onLinkedinPressed: () async {
-                                  await launchExternalUrl(
-                                    'https://www.linkedin.com/in/osama-kamel-elsalamony',
-                                  );
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 40),
-                            const Expanded(
-                              flex: 5,
-                              child: Center(child: AnimatedProfileWidget()),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Center(child: AnimatedProfileWidget()),
-                            const SizedBox(height: 48),
-                            HeroIntroText(
-                              onViewProjectsPressed: () {
-                                final key = _sectionKeys['Projects'];
-                                if (key != null) {
-                                  _scrollToSection(key);
-                                }
-                              },
-                              onDownloadCVPressed: () async {
-                                await downloadAndSaveCV();
-                              },
-                              onGetInTouchPressed: () {
-                                final key = _sectionKeys['Contact'];
-                                if (key != null) {
-                                  _scrollToSection(key);
-                                }
-                              },
-                              onGithubPressed: () async {
-                                await launchExternalUrl(
-                                  'https://github.com/osama550',
-                                );
-                              },
-                              onLinkedinPressed: () async {
-                                await launchExternalUrl(
-                                  'https://www.linkedin.com/in/osama-kamel-elsalamony',
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                  const SizedBox(height: 24),
-                  BouncingArrow(
-                    onTap: () {
-                      final key = _sectionKeys['About'];
-                      if (key != null) {
-                        _scrollToSection(key);
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  const BadgeDivider(),
-                  const SizedBox(height: 60),
-                  AboutMeSection(key: _sectionKeys['About']),
-                  const SizedBox(height: 60),
-                  const BadgeDivider(),
-                  const SizedBox(height: 60),
-                  TechnicalSkillsSection(key: _sectionKeys['Skills']),
-                  const SizedBox(height: 60),
-                  const BadgeDivider(),
-                  const SizedBox(height: 60),
-                  WorkExperienceSection(key: _sectionKeys['Experience']),
-                  const SizedBox(height: 60),
-                  const BadgeDivider(),
-                  const SizedBox(height: 60),
-                  ProjectsSection(key: _sectionKeys['Projects']),
-                  const SizedBox(height: 60),
-                  const BadgeDivider(),
-                  const SizedBox(height: 60),
-                  ContactSection(key: _sectionKeys['Contact']),
-                  const SizedBox(height: 60),
-                ],
-              ),
+            child: Column(
+              children: [
+                isDesktop
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: heroIntroText,
+                          ),
+                          const SizedBox(width: 40),
+                          const Expanded(
+                            flex: 5,
+                            child: Center(child: AnimatedProfileWidget()),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Center(child: AnimatedProfileWidget()),
+                          const SizedBox(height: 48),
+                          heroIntroText,
+                        ],
+                      ),
+                const SizedBox(height: 24),
+                BouncingArrow(
+                  onTap: () => _scrollToSectionByName('About'),
+                ),
+                const SizedBox(height: 24),
+                const BadgeDivider(),
+                const SizedBox(height: 60),
+                AboutMeSection(key: _sectionKeys['About']),
+                const SizedBox(height: 60),
+                const BadgeDivider(),
+                const SizedBox(height: 60),
+                TechnicalSkillsSection(key: _sectionKeys['Skills']),
+                const SizedBox(height: 60),
+                const BadgeDivider(),
+                const SizedBox(height: 60),
+                WorkExperienceSection(key: _sectionKeys['Experience']),
+                const SizedBox(height: 60),
+                const BadgeDivider(),
+                const SizedBox(height: 60),
+                ProjectsSection(key: _sectionKeys['Projects']),
+                const SizedBox(height: 60),
+                const BadgeDivider(),
+                const SizedBox(height: 60),
+                ContactSection(key: _sectionKeys['Contact']),
+                const SizedBox(height: 60),
+              ],
             ),
           ),
         ),

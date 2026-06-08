@@ -18,7 +18,7 @@ class ResponsiveDrawer extends StatelessWidget {
       'About': Icons.person_outline_rounded,
       'Skills': Icons.code_rounded,
       'Experience': Icons.work_outline_rounded,
-      'Projects': Icons.palette_outlined,
+      'Projects': Icons.business_center_outlined,
       'Contact': Icons.mail_outline_rounded,
     };
 

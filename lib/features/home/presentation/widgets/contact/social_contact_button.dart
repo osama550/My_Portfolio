@@ -61,7 +61,9 @@ class _SocialContactButtonState extends State<SocialContactButton> {
             width: 24,
             height: 24,
             colorFilter: ColorFilter.mode(
-              _isHovered ? ColorsPalette.textWhite : ColorsPalette.textSecondary,
+              _isHovered
+                  ? ColorsPalette.textWhite
+                  : ColorsPalette.textSecondary,
               BlendMode.srcIn,
             ),
           ),

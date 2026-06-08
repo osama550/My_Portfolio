@@ -19,111 +19,163 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="My Portfolio">
+  <meta name="description" content="Osama Kamel - Flutter Developer Portfolio">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="my_portfolio">
+  <meta name="apple-mobile-web-app-title" content="Osama Portfolio">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png">
 
-  <title>my_portfolio</title>
+  <title>Osama Kamel | Flutter Developer</title>
   <link rel="manifest" href="manifest.json">
-  <style id="splash-screen-style">
+
+  <!-- Preload Google Font for the loader -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
     html {
-      height: 100%
+      height: 100%;
     }
 
     body {
       margin: 0;
       min-height: 100%;
-      background-color: #FFFFFF;
-      background-size: 100% 100%;
+      background-color: #F5F7FB;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    .center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
+    /* === Loading Screen === */
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      background: #F5F7FB;
     }
 
-    .contain {
-      display: block;
-      width: 100%;
+    /* Animated initials badge */
+    .loader-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #1E6FFF 0%, #4ADE80 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -1px;
+      animation: badgePulse 2s ease-in-out infinite;
+      box-shadow: 0 0 40px rgba(30, 111, 255, 0.25), 0 0 80px rgba(30, 111, 255, 0.12);
+    }
+
+    @keyframes badgePulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 40px rgba(30, 111, 255, 0.25), 0 0 80px rgba(30, 111, 255, 0.12);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 60px rgba(30, 111, 255, 0.35), 0 0 100px rgba(30, 111, 255, 0.18);
+      }
+    }
+
+    /* Name text */
+    .loader-name {
+      margin-top: 24px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1E293B;
+      letter-spacing: 0.5px;
+    }
+
+    .loader-subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 400;
+      color: #64748B;
+      letter-spacing: 0.3px;
+    }
+
+    /* Progress bar */
+    .loader-progress-track {
+      margin-top: 32px;
+      width: 200px;
+      height: 3px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .loader-progress-bar {
       height: 100%;
-      object-fit: contain;
+      width: 30%;
+      background: linear-gradient(90deg, #1E6FFF, #4ADE80);
+      border-radius: 4px;
+      animation: progressSlide 1.5s ease-in-out infinite;
     }
 
-    .stretch {
-      display: block;
-      width: 100%;
-      height: 100%;
+    @keyframes progressSlide {
+      0% {
+        transform: translateX(-100%);
+        width: 30%;
+      }
+
+      50% {
+        width: 60%;
+      }
+
+      100% {
+        transform: translateX(700%);
+        width: 30%;
+      }
     }
 
-    .cover {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .bottom {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      -ms-transform: translate(-50%, 0);
-      transform: translate(-50%, 0);
-    }
-
-    .bottomLeft {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-
-    .bottomRight {
-      position: absolute;
-      bottom: 0;
-      right: 0;
+    /* Fade-out animation when Flutter is ready */
+    .loading-screen.fade-out {
+      opacity: 0;
+      transition: opacity 0.4s ease-out;
+      pointer-events: none;
     }
   </style>
-  <script id="splash-screen-script">
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.getElementById("splash-branding")?.remove();
-      document.body.style.background = "transparent";
-    }
-  </script>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 </head>
 
 <body>
-  <picture id="splash">
-    <source
-      srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x"
-      media="(prefers-color-scheme: light)">
-    <source
-      srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x"
-      media="(prefers-color-scheme: dark)">
-    <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
-  </picture>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+  <!-- Lightweight CSS-only loading screen (no images to download) -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loader-badge">OK</div>
+    <div class="loader-name">Osama Kamel</div>
+    <div class="loader-subtitle">Loading portfolio...</div>
+    <div class="loader-progress-track">
+      <div class="loader-progress-bar"></div>
+    </div>
+  </div>
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <script>
+    // Remove loading screen when Flutter signals it's ready
+    function removeLoadingScreen() {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(() => loader.remove(), 400);
+      }
+    }
+  </script>
+
   <script src="flutter_bootstrap.js" async=""></script>
-
-
 </body>
 
 </html>

@@ -22,7 +22,7 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: 200,
       leading: Container(
         alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 24),
+        padding: const EdgeInsets.only(left: 12),
         child: RichText(
           text: TextSpan(
             style: context.typography.h5Bold.copyWith(fontFamily: 'Poppins'),
@@ -60,7 +60,7 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
             final item = entry.value;
             return _NavBarItem(title: item, onTap: () => onNavItemTap(index));
           }),
-        if (!isMobile) const SizedBox(width: 24),
+        if (!isMobile) const SizedBox(width: 12),
       ],
     );
   }

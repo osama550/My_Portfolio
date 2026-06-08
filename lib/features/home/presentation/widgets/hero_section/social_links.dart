@@ -38,7 +38,7 @@ class SocialLinks extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           child: SvgPicture.asset(
             "assets/icons/linkedin.svg",
-            width: 28,
+            width: 24,
             height: 28,
             colorFilter: const ColorFilter.mode(
               ColorsPalette.textSecondary,

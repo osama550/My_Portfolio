@@ -46,7 +46,7 @@ const List<ProjectModel> projectsList = [
         'Shalehi is a chalet booking and reservation app that enables users to discover, reserve, and manage chalet bookings seamlessly through an immersive mobile experience.',
     categoryIcon: Icons.house_rounded,
     imagePathPrefix: 'assets/images/shalehi/',
-    imageExtension: '.png', // Shalehi images have uppercase .PNG
+    imageExtension: '.webp',
     imageCount: 22,
     // googlePlayUrl: 'https://play.google.com/store',
     // appStoreUrl: 'https://apps.apple.com/app-store',
@@ -72,7 +72,7 @@ const List<ProjectModel> projectsList = [
         'Hirsto is an all-in-one digital healthcare platform that enables users to monitor health data, attend video and voice medical consultations, interact with an AI health assistant, and securely manage personal and family medical records from a single application.',
     categoryIcon: Icons.health_and_safety_rounded,
     imagePathPrefix: 'assets/images/hirsto/',
-    imageExtension: '.png', // Hirsto images have lowercase .png
+    imageExtension: '.webp',
     imageCount: 31,
     // googlePlayUrl: 'https://play.google.com/store',
     // appStoreUrl: 'https://apps.apple.com/app-store',
@@ -95,7 +95,7 @@ const List<ProjectModel> projectsList = [
         'Chalet Management is a real-time booking and reservation management app for chalet vendors, enabling seamless handling of reservations, order tracking, live status updates, and customer booking operations from a single platform.',
     categoryIcon: Icons.admin_panel_settings_rounded,
     imagePathPrefix: 'assets/images/chalets_admin_booking/',
-    imageExtension: '.png', // Admin images have lowercase .png
+    imageExtension: '.webp',
     imageCount: 12,
     tags: [
       'WebSockets',
@@ -116,7 +116,7 @@ const List<ProjectModel> projectsList = [
         'A comprehensive salon management and booking platform that allows users to seamlessly schedule appointments, select their preferred specialists, and choose convenient dates and times. It also features an integrated e-commerce section for users to explore and purchase beauty products directly.',
     categoryIcon: Icons.spa_rounded,
     imagePathPrefix: 'assets/images/salons/',
-    imageExtension: '.png',
+    imageExtension: '.webp',
     imageCount: 16,
     tags: [
       'Appointment Booking',
@@ -135,7 +135,7 @@ const List<ProjectModel> projectsList = [
         'A multi-business tablet catalog app designed for reliable offline usage. Users can explore categories, detailed items, and media galleries even without internet access. Built with an offline-first architecture using Hive, focusing on fast local data access, smooth performance, and uninterrupted usability.',
     categoryIcon: Icons.point_of_sale_rounded,
     imagePathPrefix: 'assets/images/tablet_catalog/',
-    imageExtension: '.png',
+    imageExtension: '.webp',
     imageCount: 25,
     tags: [
       'Offline-First',
@@ -155,7 +155,7 @@ const List<ProjectModel> projectsList = [
         'A modern restaurant platform designed to simplify dining and food ordering, enabling users to browse interactive menus, customize orders, and track delivery or pickup orders in real time through a seamless user experience.',
     categoryIcon: Icons.restaurant_rounded,
     imagePathPrefix: 'assets/images/resturants/',
-    imageExtension: '.png',
+    imageExtension: '.webp',
     imageCount: 14,
     tags: [
       'Food Delivery',
@@ -176,7 +176,7 @@ const List<ProjectModel> projectsList = [
         'A digital car showroom experience that provides detailed vehicle specifications, high-quality imagery, and comprehensive details. It features a quick QR code scanning functionality that enables users to instantly access and compare multiple cars side-by-side.',
     categoryIcon: Icons.directions_car_rounded,
     imagePathPrefix: 'assets/images/cars_show_room/',
-    imageExtension: '.png',
+    imageExtension: '.webp',
     imageCount: 13,
     tags: [
       'QR Code Scanner',

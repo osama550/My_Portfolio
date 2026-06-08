@@ -3,7 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/breakpoints.dart';
 import 'package:my_portfolio/core/theme/color.dart';
-import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
+
+import 'floating_badge.dart';
+import 'tech_grid_painter.dart';
 
 class AnimatedProfileWidget extends StatefulWidget {
   const AnimatedProfileWidget({super.key});
@@ -37,21 +39,21 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
 
     // Responsive measurements
     final double containerSize = switch (deviceType) {
-      DeviceType.desktop => 480.0,
-      DeviceType.tablet => 390.0,
-      DeviceType.mobile => 300.0,
+      DeviceType.desktop => 500.0,
+      DeviceType.tablet => 450.0,
+      DeviceType.mobile => 350.0,
     };
 
     final double imageSize = switch (deviceType) {
       DeviceType.desktop => 280.0,
-      DeviceType.tablet => 230.0,
-      DeviceType.mobile => 180.0,
+      DeviceType.tablet => 250.0,
+      DeviceType.mobile => 200.0,
     };
 
     final double badge1Top = switch (deviceType) {
-      DeviceType.desktop => 55.0,
-      DeviceType.tablet => 45.0,
-      DeviceType.mobile => 25.0,
+      DeviceType.desktop => 65.0,
+      DeviceType.tablet => 55.0,
+      DeviceType.mobile => 35.0,
     };
 
     final double badge1Right = switch (deviceType) {
@@ -61,9 +63,9 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
     };
 
     final double badge2Bottom = switch (deviceType) {
-      DeviceType.desktop => 65.0,
-      DeviceType.tablet => 50.0,
-      DeviceType.mobile => 30.0,
+      DeviceType.desktop => 70.0,
+      DeviceType.tablet => 55.0,
+      DeviceType.mobile => 35.0,
     };
 
     final double badge2Left = switch (deviceType) {
@@ -96,7 +98,10 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
               // 1. Concentric circles/grid background
               Positioned.fill(
                 child: CustomPaint(
-                  painter: TechGridPainter(color: ColorsPalette.primary),
+                  painter: TechGridPainter(
+                    color: ColorsPalette.primary,
+                    imageSize: imageSize,
+                  ),
                 ),
               ),
 
@@ -142,7 +147,7 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('assets/images/my_image3.jpeg'),
+                          image: AssetImage('assets/images/my_image3.webp'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -186,164 +191,4 @@ class _AnimatedProfileWidgetState extends State<AnimatedProfileWidget>
       ),
     );
   }
-}
-
-class FloatingBadge extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Color iconColor;
-  final Color iconBgColor;
-
-  const FloatingBadge({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.iconColor,
-    required this.iconBgColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final typography = context.typography;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(
-        color: ColorsPalette.surface.withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: ColorsPalette.border.withValues(alpha: 0.8),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: ColorsPalette.primary.withValues(alpha: 0.06),
-            blurRadius: 16,
-            spreadRadius: 1,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: iconBgColor,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: iconColor, size: 16),
-          ),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: typography.bodyXSmallBold.copyWith(
-                  color: ColorsPalette.textPrimary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TechGridPainter extends CustomPainter {
-  final Color color;
-
-  TechGridPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color.withValues(alpha: 0.08)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
-
-    final center = Offset(size.width / 2, size.height / 2);
-    final maxRadius = size.width / 2;
-
-    // Concentric Orbit 1 (Solid, light)
-    canvas.drawCircle(center, maxRadius * 0.45, paint);
-
-    // Concentric Orbit 2 (Dashed, slightly more distinct)
-    final dashPaint = Paint()
-      ..color = color.withValues(alpha: 0.12)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
-    _drawDashedCircle(canvas, center, maxRadius * 0.70, dashPaint);
-
-    // Concentric Orbit 3 (Solid, outer limit)
-    canvas.drawCircle(center, maxRadius * 0.90, paint);
-
-    // Horizontal & Vertical Grid Lines
-    final linePaint = Paint()
-      ..color = color.withValues(alpha: 0.05)
-      ..strokeWidth = 1.0;
-    canvas.drawLine(
-      Offset(0, center.dy),
-      Offset(size.width, center.dy),
-      linePaint,
-    );
-    canvas.drawLine(
-      Offset(center.dx, 0),
-      Offset(center.dx, size.height),
-      linePaint,
-    );
-
-    // Dynamic Orbital dots for visual interest
-    final dotPaint = Paint()
-      ..color = color.withValues(alpha: 0.4)
-      ..style = PaintingStyle.fill;
-
-    final glowPaint = Paint()
-      ..color = color.withValues(alpha: 0.12)
-      ..style = PaintingStyle.fill
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
-
-    // Node 1 (top right quadrant)
-    final dot1 =
-        center + Offset.fromDirection(-0.25 * math.pi, maxRadius * 0.70);
-    canvas.drawCircle(dot1, 8, glowPaint);
-    canvas.drawCircle(dot1, 3.5, dotPaint);
-
-    // Node 2 (bottom left quadrant)
-    final dot2 =
-        center + Offset.fromDirection(0.75 * math.pi, maxRadius * 0.70);
-    canvas.drawCircle(dot2, 8, glowPaint);
-    canvas.drawCircle(dot2, 3.5, dotPaint);
-  }
-
-  void _drawDashedCircle(
-    Canvas canvas,
-    Offset center,
-    double radius,
-    Paint paint,
-  ) {
-    const int dashCount = 40;
-    final double dashAngle = (2 * math.pi) / dashCount;
-    for (int i = 0; i < dashCount; i++) {
-      if (i % 2 == 0) {
-        final double startAngle = i * dashAngle;
-
-        final path = Path()
-          ..addArc(
-            Rect.fromCircle(center: center, radius: radius),
-            startAngle,
-            dashAngle,
-          );
-        canvas.drawPath(path, paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

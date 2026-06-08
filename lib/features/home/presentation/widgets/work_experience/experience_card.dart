@@ -200,35 +200,46 @@ class _ExperienceCardState extends State<ExperienceCard> {
           ),
         ),
         const SizedBox(height: 8),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(
-              Icons.calendar_today_rounded,
-              size: 14,
-              color: ColorsPalette.textSecondary,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              widget.experience.period,
-              style: typography.bodyXSmallMedium.copyWith(
-                color: ColorsPalette.textSecondary,
-              ),
-            ),
-            const SizedBox(width: 16),
-            const Icon(
-              Icons.location_on_rounded,
-              size: 14,
-              color: ColorsPalette.textHint,
-            ),
-            const SizedBox(width: 4),
-            Expanded(
-              child: Text(
-                widget.experience.location,
-                style: typography.bodyXSmallMedium.copyWith(
+            Row(
+              children: [
+                const Icon(
+                  Icons.calendar_today_rounded,
+                  size: 14,
                   color: ColorsPalette.textSecondary,
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    widget.experience.period,
+                    style: typography.bodyXSmallMedium.copyWith(
+                      color: ColorsPalette.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                const Icon(
+                  Icons.location_on_rounded,
+                  size: 14,
+                  color: ColorsPalette.textHint,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    widget.experience.location,
+                    style: typography.bodyXSmallMedium.copyWith(
+                      color: ColorsPalette.textSecondary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
