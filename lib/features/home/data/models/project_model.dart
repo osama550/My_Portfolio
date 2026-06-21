@@ -48,9 +48,11 @@ const List<ProjectModel> projectsList = [
     imagePathPrefix: 'assets/images/shalehi/',
     imageExtension: '.webp',
     imageCount: 22,
-    // googlePlayUrl: 'https://play.google.com/store',
-    // appStoreUrl: 'https://apps.apple.com/app-store',
-    // webUrl: 'https://app.shalehi.com',
+    googlePlayUrl:
+        'https://play.google.com/store/apps/details?id=com.app.shalehi&pcampaignid=web_share',
+    appStoreUrl:
+        'https://apps.apple.com/eg/app/shalehi-%D8%B4%D8%A7%D9%84%D9%8A%D9%87%D9%8A/id1371783469',
+    webUrl: 'https://app.shalehi.com',
     tags: [
       'BLoC/Cubit',
       'REST APIs',
