@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/breakpoints.dart';
-import 'package:my_portfolio/core/utils/functions/cv_downloader.dart';
 import 'package:my_portfolio/core/utils/functions/url_launcher.dart';
 import 'package:my_portfolio/core/widgets/badge_divider.dart';
 import 'package:my_portfolio/features/home/presentation/widgets/about_me/about_me_section.dart';
@@ -71,7 +70,7 @@ class _HomePageState extends State<HomePage> {
 
     final heroIntroText = HeroIntroText(
       onViewProjectsPressed: () => _scrollToSectionByName('Projects'),
-      onDownloadCVPressed: () => downloadAndSaveCV(),
+      onDownloadCVPressed: () => launchExternalUrl('https://flowcv.com/resume/4fhn0icdnq'),
       onGetInTouchPressed: () => _scrollToSectionByName('Contact'),
       onGithubPressed: () => launchExternalUrl('https://github.com/osama550'),
       onLinkedinPressed: () => launchExternalUrl(
