@@ -70,7 +70,8 @@ class _HomePageState extends State<HomePage> {
 
     final heroIntroText = HeroIntroText(
       onViewProjectsPressed: () => _scrollToSectionByName('Projects'),
-      onDownloadCVPressed: () => launchExternalUrl('https://flowcv.com/resume/4fhn0icdnq'),
+      onDownloadCVPressed: () =>
+          launchExternalUrl('https://flowcv.com/resume/4fhn0icdnq'),
       onGetInTouchPressed: () => _scrollToSectionByName('Contact'),
       onGithubPressed: () => launchExternalUrl('https://github.com/osama550'),
       onLinkedinPressed: () => launchExternalUrl(
@@ -102,10 +103,7 @@ class _HomePageState extends State<HomePage> {
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Expanded(
-                            flex: 5,
-                            child: heroIntroText,
-                          ),
+                          Expanded(flex: 5, child: heroIntroText),
                           const SizedBox(width: 40),
                           const Expanded(
                             flex: 5,
@@ -123,9 +121,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                 const SizedBox(height: 24),
-                BouncingArrow(
-                  onTap: () => _scrollToSectionByName('About'),
-                ),
+                BouncingArrow(onTap: () => _scrollToSectionByName('About')),
                 const SizedBox(height: 24),
                 const BadgeDivider(),
                 const SizedBox(height: 60),
@@ -155,3 +151,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+//
