@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/core/theme/breakpoints.dart';
-import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
+import 'package:my_portfolio/core/widgets/mono_tag.dart';
+import 'package:my_portfolio/core/widgets/status_pill.dart';
 
+import 'hero_stats.dart';
 import 'intro_action_buttons.dart';
 import 'intro_rich_text.dart';
 import 'social_links.dart';
-import 'welcome_badge.dart';
 
 class HeroIntroText extends StatelessWidget {
   final VoidCallback? onViewProjectsPressed;
@@ -14,6 +14,8 @@ class HeroIntroText extends StatelessWidget {
   final VoidCallback? onGetInTouchPressed;
   final VoidCallback? onGithubPressed;
   final VoidCallback? onLinkedinPressed;
+  final VoidCallback? onEmailPressed;
+  final VoidCallback? onShalehiPressed;
 
   const HeroIntroText({
     super.key,
@@ -22,50 +24,87 @@ class HeroIntroText extends StatelessWidget {
     this.onGetInTouchPressed,
     this.onGithubPressed,
     this.onLinkedinPressed,
+    this.onEmailPressed,
+    this.onShalehiPressed,
   });
+
+  static const _tags = [
+    'Flutter',
+    'Dart',
+    'BLoC / Cubit',
+    'Clean Architecture',
+    'Firebase',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final deviceType = context.deviceType;
-    final isMobile = deviceType == DeviceType.mobile;
-    final typography = context.typography;
-
-    final align = isMobile
-        ? CrossAxisAlignment.center
-        : CrossAxisAlignment.start;
-    final textAlign = isMobile ? TextAlign.center : TextAlign.start;
-    final wrapAlignment = isMobile ? WrapAlignment.center : WrapAlignment.start;
-    final rowAlignment = isMobile
-        ? MainAxisAlignment.center
-        : MainAxisAlignment.start;
+    final colors = context.colors;
+    final strong = TextStyle(
+      color: colors.heading,
+      fontWeight: FontWeight.w600,
+    );
 
     return Column(
-      crossAxisAlignment: align,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const WelcomeBadge(),
+        const StatusPill('Flutter Developer at Barq Solutions · Remote'),
         const SizedBox(height: 24),
-        IntroRichText(textAlign: textAlign),
-        const SizedBox(height: 18),
-        Text(
-          '2+ years building scalable mobile applications with Flutter & Clean Architecture. Experienced in BLoC/Cubit, real-time systems',
-          textAlign: textAlign,
-          style: typography.bodyLargeMedium.copyWith(
-            color: ColorsPalette.textSecondary,
-            height: 1.6,
+        const IntroRichText(),
+        const SizedBox(height: 26),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: Text.rich(
+            TextSpan(
+              style: TextStyle(
+                fontSize: context.fluid(15.5, 1.8, 18),
+                height: 1.7,
+                color: colors.textSecondary,
+              ),
+              children: [
+                TextSpan(
+                  text:
+                      'I’m Osama, a Flutter developer with 2+ years building booking, ordering and healthcare apps for mobile and web. I structure features with ',
+                ),
+                TextSpan(text: 'Clean Architecture', style: strong),
+                TextSpan(text: ' and '),
+                TextSpan(text: 'BLoC', style: strong),
+                TextSpan(
+                  text:
+                      ' to keep code modular and testable, with real-time updates, offline-first storage and KNET payments.',
+                ),
+              ],
+            ),
           ),
+        ),
+        const SizedBox(height: 22),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final tag in _tags)
+              MonoTag(
+                tag,
+                background: colors.surface,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 11,
+                  vertical: 6,
+                ),
+              ),
+          ],
         ),
         const SizedBox(height: 32),
         IntroActionButtons(
-          alignment: wrapAlignment,
           onViewProjectsPressed: onViewProjectsPressed,
           onDownloadCVPressed: onDownloadCVPressed,
           onGetInTouchPressed: onGetInTouchPressed,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 40),
+        HeroStats(onShalehiPressed: onShalehiPressed),
+        const SizedBox(height: 28),
         SocialLinks(
-          alignment: rowAlignment,
           onGithubPressed: onGithubPressed,
           onLinkedinPressed: onLinkedinPressed,
+          onEmailPressed: onEmailPressed,
         ),
       ],
     );

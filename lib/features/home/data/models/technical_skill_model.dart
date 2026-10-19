@@ -14,7 +14,7 @@ class TechnicalSkillModel {
 
 const List<TechnicalSkillModel> technicalSkills = [
   TechnicalSkillModel(
-    title: 'Mobile Development',
+    title: 'Mobile & architecture',
     icon: Icons.smartphone_rounded,
     skills: [
       'Flutter',
@@ -22,6 +22,8 @@ const List<TechnicalSkillModel> technicalSkills = [
       'Clean Architecture',
       'MVVM',
       'BLoC/Cubit',
+      'Provider',
+      'Riverpod',
       'GoRouter',
       'SOLID',
       'OOP',
@@ -29,27 +31,34 @@ const List<TechnicalSkillModel> technicalSkills = [
     ],
   ),
   TechnicalSkillModel(
-    title: 'Backend & Integration',
+    title: 'Integration',
     icon: Icons.cloud_queue_rounded,
     skills: [
       'REST APIs',
+      'GraphQL',
       'Dio',
       'WebSockets',
       'Firebase',
       'Supabase',
       'Google Maps',
       'OneSignal',
-      'Payment Gateways',
+      'KNET Payments',
       'ElevenLabs',
+      'Zego Cloud',
     ],
   ),
   TechnicalSkillModel(
-    title: 'State Management & Storage',
+    title: 'Storage & concurrency',
     icon: Icons.storage_rounded,
-    skills: ['Hive', 'SharedPreferences', 'FlutterSecureStorage'],
+    skills: [
+      'Hive',
+      'SharedPreferences',
+      'Flutter Secure Storage',
+      'Dart Isolates',
+    ],
   ),
   TechnicalSkillModel(
-    title: 'Testing, DevOps & Tools',
+    title: 'Testing & delivery',
     icon: Icons.construction_rounded,
     skills: [
       'Unit Testing',
@@ -65,7 +74,7 @@ const List<TechnicalSkillModel> technicalSkills = [
     ],
   ),
   TechnicalSkillModel(
-    title: 'UI/UX & App Features',
+    title: 'UI & app features',
     icon: Icons.palette_outlined,
     skills: [
       'Responsive Design',
@@ -73,10 +82,11 @@ const List<TechnicalSkillModel> technicalSkills = [
       'Localization',
       'Deep Linking',
       'Figma',
+      'Agile / Scrum',
     ],
   ),
   TechnicalSkillModel(
-    title: 'Computer Science & Problem Solving',
+    title: 'Fundamentals',
     icon: Icons.psychology_outlined,
     skills: ['Data Structures', 'Algorithms', 'Problem Solving'],
   ),

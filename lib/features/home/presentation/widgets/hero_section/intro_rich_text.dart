@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
 
 class IntroRichText extends StatelessWidget {
-  final TextAlign textAlign;
-
-  const IntroRichText({super.key, required this.textAlign});
+  const IntroRichText({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final typography = context.typography;
-    return RichText(
-      textAlign: textAlign,
-      text: TextSpan(
-        style: typography.h1Bold.copyWith(
-          color: ColorsPalette.textPrimary,
-          height: 1.2,
+    final colors = context.colors;
+    final size = context.fluid(40, 6.4, 72);
+    return Text.rich(
+      TextSpan(
+        style: TextStyle(
+          fontSize: size,
+          fontWeight: FontWeight.w800,
+          height: 1.02,
+          letterSpacing: -size * 0.035,
+          color: colors.textPrimary,
         ),
         children: [
-          TextSpan(text: "Hi, I'm \n", style: typography.h4Bold),
-          TextSpan(text: 'Osama ', style: typography.h2Bold),
+          const TextSpan(text: 'Flutter apps for '),
           TextSpan(
-            text: 'Kamel\n',
-            style: typography.h2Bold.copyWith(color: ColorsPalette.primary),
+            text: 'real-time, multi-tenant products.',
+            style: TextStyle(
+              color: colors.accent,
+              decoration: TextDecoration.underline,
+              decorationThickness: 3,
+              decorationColor: colors.accent.withValues(alpha: 0.35),
+            ),
           ),
-          TextSpan(text: 'Flutter Developer', style: typography.h5Bold),
         ],
       ),
     );
