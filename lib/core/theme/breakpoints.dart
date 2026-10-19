@@ -5,6 +5,7 @@ class Breakpoints {
   static const double mobile = 400;
   static const double tablet = 600;
   static const double desktop = 1000;
+  static const double navExpanded = 960;
 
   static DeviceType of(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
@@ -21,4 +22,6 @@ extension ResponsiveContextExtensions on BuildContext {
   bool get isMobile => deviceType == DeviceType.mobile;
   bool get isTablet => deviceType == DeviceType.tablet;
   bool get isDesktop => deviceType == DeviceType.desktop;
+  bool get isWideNav =>
+      MediaQuery.sizeOf(this).width >= Breakpoints.navExpanded;
 }

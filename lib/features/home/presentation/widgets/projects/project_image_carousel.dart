@@ -1,8 +1,8 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 import 'project_gallery_viewer.dart';
+import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
 
 class ProjectImageCarousel extends StatefulWidget {
   final List<String> images;
@@ -21,18 +21,16 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     if (widget.images.isEmpty) {
       return Container(
         height: 250,
-        decoration: BoxDecoration(
-          color: ColorsPalette.border.withValues(alpha: 0.2),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        child: const Center(
+        decoration: BoxDecoration(color: colors.surfaceMuted),
+        child: Center(
           child: Icon(
             Icons.image_not_supported_rounded,
             size: 48,
-            color: ColorsPalette.textHint,
+            color: colors.textHint,
           ),
         ),
       );
@@ -75,46 +73,35 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
                     ),
                   );
                 },
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: ColorsPalette.primary.withValues(alpha: 0.02),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.broken_image_rounded,
-                                size: 40,
-                                color: ColorsPalette.textHint,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Failed to load image',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: ColorsPalette.textSecondary.withValues(
-                                    alpha: 0.7,
-                                  ),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.broken_image_rounded,
+                              size: 40,
+                              color: colors.textHint,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Failed to load image',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: colors.textSecondary.withValues(
+                                  alpha: 0.7,
                                 ),
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               );
@@ -144,7 +131,7 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
                       width: isSelected ? 14.0 : 5.0,
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? ColorsPalette.primary
+                            ? colors.accent
                             : ColorsPalette.white.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(3),
                       ),
@@ -217,7 +204,7 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
         child: InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: onPressed,
-          child: Icon(icon, size: 24, color: ColorsPalette.textPrimary),
+          child: Icon(icon, size: 24, color: ColorsPalette.onPrimary),
         ),
       ),
     );

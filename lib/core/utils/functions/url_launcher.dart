@@ -17,10 +17,7 @@ Future<void> launchExternalUrl(String urlString) async {
 
 /// Opens the default email client with a specified email address.
 Future<void> launchEmail(String email) async {
-  final Uri emailUri = Uri(
-    scheme: 'mailto',
-    path: email,
-  );
+  final Uri emailUri = Uri(scheme: 'mailto', path: email);
   try {
     if (await canLaunchUrl(emailUri)) {
       await launchUrl(emailUri, mode: LaunchMode.externalApplication);
@@ -34,10 +31,7 @@ Future<void> launchEmail(String email) async {
 
 /// Initiates a phone call to the specified phone number.
 Future<void> launchPhone(String phoneNumber) async {
-  final Uri phoneUri = Uri(
-    scheme: 'tel',
-    path: phoneNumber,
-  );
+  final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
   try {
     if (await canLaunchUrl(phoneUri)) {
       await launchUrl(phoneUri, mode: LaunchMode.externalApplication);
@@ -48,4 +42,3 @@ Future<void> launchPhone(String phoneNumber) async {
     log('Error launching phone: $e', stackTrace: stackTrace);
   }
 }
-

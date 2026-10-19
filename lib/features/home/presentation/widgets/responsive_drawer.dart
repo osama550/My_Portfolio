@@ -1,133 +1,112 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/color.dart';
+
+import 'package:my_portfolio/core/widgets/theme_toggle_button.dart';
+
+import 'brand_logo.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
 
 class ResponsiveDrawer extends StatelessWidget {
   final List<String> navItems;
-  final Function(int) onNavItemTap;
+  final ValueListenable<int> activeIndex;
+  final ValueChanged<int> onNavItemTap;
+  final VoidCallback onHireMePressed;
 
   const ResponsiveDrawer({
     super.key,
     required this.navItems,
+    required this.activeIndex,
     required this.onNavItemTap,
+    required this.onHireMePressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    final itemIcons = {
-      'About': Icons.person_outline_rounded,
-      'Skills': Icons.code_rounded,
-      'Experience': Icons.work_outline_rounded,
-      'Projects': Icons.business_center_outlined,
-      'Contact': Icons.mail_outline_rounded,
-    };
-
+    final colors = context.colors;
     return Drawer(
-      backgroundColor: ColorsPalette.surface,
-      elevation: 16,
+      backgroundColor: colors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          bottomLeft: Radius.circular(24),
-        ),
+        borderRadius: BorderRadius.horizontal(left: Radius.circular(24)),
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      style: context.typography.h5Bold.copyWith(
-                        fontFamily: 'Poppins',
-                      ),
-                      children: const [
-                        TextSpan(
-                          text: '<',
-                          style: TextStyle(color: ColorsPalette.primary),
-                        ),
-                        TextSpan(
-                          text: 'Dev',
-                          style: TextStyle(color: ColorsPalette.primary),
-                        ),
-                        TextSpan(
-                          text: ' />',
-                          style: TextStyle(color: ColorsPalette.primary),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const BrandLogo(),
+                  const ThemeToggleButton(),
                   IconButton(
-                    icon: const Icon(
+                    tooltip: 'Close menu',
+                    icon: Icon(
                       Icons.close_rounded,
-                      color: ColorsPalette.textSecondary,
+                      color: colors.textSecondary,
                     ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
-              const Divider(color: ColorsPalette.border),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               Expanded(
-                child: ListView.separated(
-                  itemCount: navItems.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final title = navItems[index];
-                    final icon =
-                        itemIcons[title] ?? Icons.arrow_forward_ios_rounded;
-                    return InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        onNavItemTap(index);
-                      },
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 16,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: ColorsPalette.border.withValues(alpha: 0.5),
+                child: ValueListenableBuilder<int>(
+                  valueListenable: activeIndex,
+                  builder: (context, active, _) => ListView.separated(
+                    itemCount: navItems.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 4),
+                    itemBuilder: (context, index) {
+                      final isActive = index == active;
+                      return InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          onNavItemTap(index);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: isActive
+                                ? colors.accentTint
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            navItems[index],
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: isActive
+                                  ? colors.accent
+                                  : colors.textSecondary,
+                            ),
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(icon, color: ColorsPalette.primary, size: 22),
-                            const SizedBox(width: 16),
-                            Text(
-                              title,
-                              style: context.typography.bodyLargeSemiBold
-                                  .copyWith(color: ColorsPalette.textPrimary),
-                            ),
-                            const Spacer(),
-                            const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 14,
-                              color: ColorsPalette.textHint,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Center(
-                child: Text(
-                  '© ${DateTime.now().year} Osama. All rights reserved.',
-                  style: context.typography.bodyXSmallMedium.copyWith(
-                    color: ColorsPalette.textHint,
+                      );
+                    },
                   ),
                 ),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onHireMePressed();
+                },
+                style: FilledButton.styleFrom(
+                  backgroundColor: ColorsPalette.primary,
+                  foregroundColor: ColorsPalette.onPrimary,
+                  padding: const EdgeInsets.all(14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
+                ),
+                child: const Text('Hire Me'),
               ),
             ],
           ),
