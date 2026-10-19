@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_portfolio/core/theme/app_fonts.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
@@ -239,32 +242,69 @@ class _EmailCard extends StatefulWidget {
 }
 
 class _EmailCardState extends State<_EmailCard> {
+  static const _copiedDuration = Duration(seconds: 2);
+
   bool _hovered = false;
+  bool _copied = false;
+  Timer? _resetTimer;
+
+  @override
+  void dispose() {
+    _resetTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _copy() async {
+    await Clipboard.setData(const ClipboardData(text: ContactSection._email));
+    if (!mounted) return;
+    setState(() => _copied = true);
+    _resetTimer?.cancel();
+    _resetTimer = Timer(_copiedDuration, () {
+      if (mounted) setState(() => _copied = false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Email me',
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) => setState(() => _hovered = true),
-        onExit: (_) => setState(() => _hovered = false),
+      label: 'Email me at ${ContactSection._email}',
+      child: FocusableActionDetector(
+        mouseCursor: SystemMouseCursors.click,
+        onShowHoverHighlight: (v) => setState(() => _hovered = v),
+        onShowFocusHighlight: (v) => setState(() => _hovered = v),
+        actions: {
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (_) {
+              widget.onTap();
+              return null;
+            },
+          ),
+        },
         child: GestureDetector(
           onTap: widget.onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
             transform: Matrix4.translationValues(0, _hovered ? -2 : 0, 0),
             constraints: const BoxConstraints(minHeight: 72),
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             decoration: BoxDecoration(
               color: _hovered
                   ? ColorsPalette.primaryLight
                   : ColorsPalette.primary,
               borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: ColorsPalette.primary.withValues(
+                    alpha: _hovered ? 0.35 : 0,
+                  ),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Column(
@@ -280,22 +320,48 @@ class _EmailCardState extends State<_EmailCard> {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        ContactSection._email,
-                        style: TextStyle(
-                          fontSize: context.fluid(15, 2.4, 18),
-                          fontWeight: FontWeight.w700,
-                          color: ColorsPalette.onPrimary,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          ContactSection._email,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: context.fluid(15, 2.4, 18),
+                            fontWeight: FontWeight.w700,
+                            color: ColorsPalette.onPrimary,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 14),
-                const Icon(
-                  Icons.arrow_forward_rounded,
-                  size: 22,
-                  color: ColorsPalette.onPrimary,
+                const SizedBox(width: 8),
+                Tooltip(
+                  message: _copied ? 'Copied!' : 'Copy email',
+                  child: IconButton(
+                    onPressed: _copy,
+                    visualDensity: VisualDensity.compact,
+                    color: ColorsPalette.onPrimary,
+                    icon: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 150),
+                      child: Icon(
+                        _copied ? Icons.check_rounded : Icons.copy_rounded,
+                        key: ValueKey(_copied),
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                AnimatedSlide(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                  offset: Offset(_hovered ? 0.25 : 0, 0),
+                  child: const Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 22,
+                    color: ColorsPalette.onPrimary,
+                  ),
                 ),
               ],
             ),
