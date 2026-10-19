@@ -1,263 +1,188 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/core/theme/app_typography.dart';
-import 'package:my_portfolio/core/theme/breakpoints.dart';
+import 'package:my_portfolio/core/theme/app_fonts.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
+import 'package:my_portfolio/core/widgets/mono_tag.dart';
 
 import '../../../data/models/work_experience_model.dart';
 
-class ExperienceCard extends StatefulWidget {
+class ExperienceCard extends StatelessWidget {
   final WorkExperienceModel experience;
+  final bool isCurrent;
 
-  const ExperienceCard({super.key, required this.experience});
-
-  @override
-  State<ExperienceCard> createState() => _ExperienceCardState();
-}
-
-class _ExperienceCardState extends State<ExperienceCard> {
-  bool _isHovered = false;
+  const ExperienceCard({
+    super.key,
+    required this.experience,
+    required this.isCurrent,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final typography = context.typography;
-    final isMobile = context.isMobile;
+    final colors = context.colors;
+    final padding = context.fluid(22, 3, 32);
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-        transform: _isHovered
-            ? Matrix4.translationValues(0, -6, 0)
-            : Matrix4.identity(),
-        padding: const EdgeInsets.all(24.0),
-        decoration: BoxDecoration(
-          color: ColorsPalette.card,
-          borderRadius: BorderRadius.circular(16.0),
-          border: Border.all(
-            color: _isHovered ? ColorsPalette.primary : ColorsPalette.border,
-            width: 1.5,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(padding),
+          decoration: BoxDecoration(
+            color: colors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: colors.border),
           ),
-          boxShadow: [
-            if (_isHovered)
-              BoxShadow(
-                color: ColorsPalette.primary.withValues(alpha: 0.08),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              )
-            else
-              BoxShadow(
-                color: ColorsPalette.shadow.withValues(alpha: 0.02),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Responsive Header (Title, Company, Date, Location)
-            if (isMobile)
-              _buildMobileHeader(typography)
-            else
-              _buildDesktopHeader(typography),
-
-            const SizedBox(height: 16),
-
-            // Tech / Context Tags
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: widget.experience.tags
-                  .map((tag) => _buildTag(tag, typography))
-                  .toList(),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Bullet Description Points
-            ...widget.experience.bullets.map(
-              (bullet) => Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: Row(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final when = _When(experience: experience);
+              final details = _Details(experience: experience);
+              if (constraints.maxWidth >= 560) {
+                return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2.0, right: 8.0),
-                      child: Icon(
-                        Icons.chevron_right_rounded,
-                        color: ColorsPalette.primary,
-                        size: 20,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        bullet,
-                        style: typography.bodyMediumRegular.copyWith(
-                          color: ColorsPalette.textSecondary,
-                          height: 1.5,
+                    Expanded(child: when),
+                    const SizedBox(width: 40),
+                    Expanded(flex: 2, child: details),
+                  ],
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [when, const SizedBox(height: 14), details],
+              );
+            },
+          ),
+        ),
+        Positioned(
+          left: -44,
+          top: 34,
+          child: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isCurrent ? ColorsPalette.primary : colors.background,
+              border: Border.all(color: colors.accent, width: 2),
+              boxShadow: [
+                BoxShadow(color: colors.background, spreadRadius: 5),
+                if (isCurrent)
+                  const BoxShadow(color: ColorsPalette.primary, blurRadius: 14),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _When extends StatelessWidget {
+  final WorkExperienceModel experience;
+
+  const _When({required this.experience});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: colors.accentTint,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            experience.period,
+            style: AppFonts.mono(size: 12.5, color: colors.accent),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          experience.location,
+          style: TextStyle(fontSize: 14, color: colors.textHint),
+        ),
+      ],
+    );
+  }
+}
+
+class _Details extends StatelessWidget {
+  final WorkExperienceModel experience;
+
+  const _Details({required this.experience});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              height: 1.3,
+              color: colors.heading,
+            ),
+            children: [
+              TextSpan(text: '${experience.role} '),
+              TextSpan(
+                text: 'at',
+                style: TextStyle(
+                  color: colors.textHint,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              TextSpan(text: ' ${experience.company}'),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
+            children: [
+              for (final bullet in experience.bullets)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 9),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '—',
+                        style: TextStyle(
+                          fontSize: 15,
+                          height: 1.55,
+                          color: colors.accent,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDesktopHeader(AppTypography typography) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                widget.experience.role,
-                style: typography.bodyXLargeBold.copyWith(
-                  color: ColorsPalette.textPrimary,
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Row(
-              children: [
-                const Icon(
-                  Icons.calendar_today_rounded,
-                  size: 16,
-                  color: ColorsPalette.textSecondary,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  widget.experience.period,
-                  style: typography.bodyMediumMedium.copyWith(
-                    color: ColorsPalette.textSecondary,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          bullet,
+                          style: TextStyle(
+                            fontSize: 15,
+                            height: 1.55,
+                            color: colors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 6),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                widget.experience.company,
-                style: typography.bodyLargeBold.copyWith(
-                  color: ColorsPalette.primary,
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on_rounded,
-                  size: 16,
-                  color: ColorsPalette.textHint,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  widget.experience.location,
-                  style: typography.bodyMediumRegular.copyWith(
-                    color: ColorsPalette.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ],
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: [for (final tag in experience.tags) MonoTag(tag)],
         ),
       ],
-    );
-  }
-
-  Widget _buildMobileHeader(AppTypography typography) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          widget.experience.role,
-          style: typography.bodyLargeBold.copyWith(
-            color: ColorsPalette.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          widget.experience.company,
-          style: typography.bodyMediumBold.copyWith(
-            color: ColorsPalette.primary,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.calendar_today_rounded,
-                  size: 14,
-                  color: ColorsPalette.textSecondary,
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    widget.experience.period,
-                    style: typography.bodyXSmallMedium.copyWith(
-                      color: ColorsPalette.textSecondary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on_rounded,
-                  size: 14,
-                  color: ColorsPalette.textHint,
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    widget.experience.location,
-                    style: typography.bodyXSmallMedium.copyWith(
-                      color: ColorsPalette.textSecondary,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTag(String tag, AppTypography typography) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: ColorsPalette.primary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        tag,
-        style: typography.bodyXSmallBold.copyWith(color: ColorsPalette.primary),
-      ),
     );
   }
 }

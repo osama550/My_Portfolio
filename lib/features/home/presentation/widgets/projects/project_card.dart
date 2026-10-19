@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/core/theme/color.dart';
+import 'package:my_portfolio/core/theme/app_fonts.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
 import 'package:my_portfolio/core/utils/functions/url_launcher.dart';
+import 'package:my_portfolio/core/widgets/app_button.dart';
+import 'package:my_portfolio/core/widgets/mono_tag.dart';
 import 'package:my_portfolio/features/home/data/models/project_model.dart';
 
 import 'project_image_carousel.dart';
 
 class ProjectCard extends StatefulWidget {
   final ProjectModel project;
+  final bool featured;
 
-  const ProjectCard({super.key, required this.project});
+  const ProjectCard({super.key, required this.project, this.featured = false});
 
   @override
   State<ProjectCard> createState() => _ProjectCardState();
@@ -20,250 +23,180 @@ class _ProjectCardState extends State<ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
-    final typography = context.typography;
+    final colors = context.colors;
+    final project = widget.project;
+    final featured = widget.featured;
+    final inset = featured ? 14.0 : 12.0;
+    final tags = featured ? project.tags : project.tags.take(4).toList();
+    final detailPadding = featured
+        ? EdgeInsets.all(context.fluid(20, 3, 28))
+        : const EdgeInsets.fromLTRB(14, 6, 14, 14);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-        transform: _isHovered
-            ? Matrix4.translationValues(0, -6, 0)
-            : Matrix4.identity(),
+        duration: const Duration(milliseconds: 200),
+        transform: Matrix4.translationValues(0, _isHovered ? -3 : 0, 0),
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: ColorsPalette.card,
-          borderRadius: BorderRadius.circular(20.0),
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(featured ? 22 : 20),
           border: Border.all(
-            color: _isHovered ? ColorsPalette.primary : ColorsPalette.border,
-            width: 1.5,
+            color: _isHovered ? colors.borderHover : colors.border,
           ),
-          boxShadow: [
-            if (_isHovered)
-              BoxShadow(
-                color: ColorsPalette.primary.withValues(alpha: 0.1),
-                blurRadius: 24,
-                offset: const Offset(0, 10),
-              )
-            else
-              BoxShadow(
-                color: ColorsPalette.shadow.withValues(alpha: 0.03),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-          ],
         ),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Media Area with Carousel and Category Floating Badge
-              Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(inset, inset, inset, 0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(featured ? 14 : 12),
+                child: ColoredBox(
+                  color: colors.surfaceMuted,
+                  child: project.inDevelopment
+                      ? const _InDevelopmentBanner()
+                      : ProjectImageCarousel(images: project.images),
+                ),
+              ),
+            ),
+            Padding(
+              padding: detailPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ProjectImageCarousel(images: widget.project.images),
-
-                  // Floating category icon badge in top-right
-                  Positioned(
-                    top: 14,
-                    right: 14,
-                    child: Container(
-                      width: 42,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        color: ColorsPalette.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorsPalette.black.withValues(alpha: 0.12),
-                            blurRadius: 8,
-                            offset: const Offset(0, 3),
+                  Row(
+                    children: [
+                      Icon(
+                        project.categoryIcon,
+                        size: 14,
+                        color: colors.accent,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          project.category,
+                          style: AppFonts.mono(
+                            size: 11.5,
+                            color: colors.textHint,
                           ),
-                        ],
+                        ),
                       ),
-                      child: Icon(
-                        widget.project.categoryIcon,
-                        color: ColorsPalette.primary,
-                        size: 22,
-                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    project.title,
+                    style: TextStyle(
+                      fontSize: featured ? 26 : 20,
+                      fontWeight: FontWeight.w700,
+                      height: featured ? 1.15 : 1.25,
+                      letterSpacing: featured ? -0.39 : 0,
+                      color: colors.heading,
                     ),
                   ),
-                ],
-              ),
-
-              // Details Area
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    Text(
-                      widget.project.title,
-                      style: typography.bodyXLargeBold.copyWith(
-                        color: ColorsPalette.textPrimary,
-                      ),
+                  const SizedBox(height: 14),
+                  Text(
+                    project.description,
+                    style: TextStyle(
+                      fontSize: featured ? 15.5 : 14.5,
+                      height: 1.6,
+                      color: featured ? colors.textSecondary : colors.textMuted,
                     ),
-                    const SizedBox(height: 12),
-
-                    // Description
-                    Text(
-                      widget.project.description,
-                      style: typography.bodyMediumRegular.copyWith(
-                        color: ColorsPalette.textSecondary,
-                        height: 1.5,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Bullets Features list
-                    ...widget.project.bullets.map(
-                      (bullet) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
+                  ),
+                  if (project.bullets.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    for (final bullet in project.bullets)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.only(top: 3.0, right: 8.0),
-                              child: Icon(
-                                Icons.chevron_right_rounded,
-                                color: ColorsPalette.primary,
-                                size: 18,
+                            Text(
+                              '—',
+                              style: TextStyle(
+                                fontSize: 14.5,
+                                height: 1.5,
+                                color: colors.accent,
                               ),
                             ),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Text(
                                 bullet,
-                                style: typography.bodyMediumRegular.copyWith(
-                                  color: ColorsPalette.textSecondary,
-                                  height: 1.4,
+                                style: TextStyle(
+                                  fontSize: 14.5,
+                                  height: 1.5,
+                                  color: colors.textMuted,
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // TECH STACK Header & Wrap tags
-                    Text(
-                      'TECH STACK',
-                      style: typography.bodySmallBold.copyWith(
-                        color: ColorsPalette.primary,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
+                  ],
+                  const SizedBox(height: 14),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [for (final tag in tags) MonoTag(tag)],
+                  ),
+                  if (_links(project).isNotEmpty) ...[
+                    const SizedBox(height: 22),
                     Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: widget.project.tags
-                          .map((tag) => _buildTag(tag, typography))
-                          .toList(),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Action Buttons (conditionally rendered)
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: [
-                        if (widget.project.googlePlayUrl != null)
-                          _buildActionButton(
-                            label: 'Google Play',
-                            icon: Icons.play_arrow_rounded,
-                            url: widget.project.googlePlayUrl!,
-                            typography: typography,
-                          ),
-                        if (widget.project.appStoreUrl != null)
-                          _buildActionButton(
-                            label: 'App Store',
-                            icon: Icons.apple_rounded,
-                            url: widget.project.appStoreUrl!,
-                            typography: typography,
-                          ),
-                        if (widget.project.webUrl != null)
-                          _buildActionButton(
-                            label: 'Website',
-                            icon: Icons.language_rounded,
-                            url: widget.project.webUrl!,
-                            typography: typography,
-                          ),
-                        if (widget.project.githubUrl != null)
-                          _buildActionButton(
-                            label: 'Source Code',
-                            icon: Icons.code_rounded,
-                            url: widget.project.githubUrl!,
-                            typography: typography,
-                          ),
-                      ],
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: _links(project),
                     ),
                   ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTag(String tag, var typography) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: ColorsPalette.primary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        tag,
-        style: typography.bodyXSmallBold.copyWith(color: ColorsPalette.primary),
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required String label,
-    required IconData icon,
-    required String url,
-    required var typography,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: ColorsPalette.primary.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ColorsPalette.primary,
-          foregroundColor: ColorsPalette.textWhite,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        onPressed: () => launchExternalUrl(url),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 18, color: ColorsPalette.textWhite),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: typography.bodySmallBold.copyWith(
-                color: ColorsPalette.textWhite,
+                ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  List<Widget> _links(ProjectModel project) {
+    Widget link(String label, String url) => AppButton(
+      label: label,
+      trailingIcon: Icons.north_east_rounded,
+      style: AppButtonStyle.outlined,
+      compact: true,
+      onPressed: () => launchExternalUrl(url),
+    );
+
+    return [
+      if (project.googlePlayUrl != null)
+        link('Google Play', project.googlePlayUrl!),
+      if (project.appStoreUrl != null) link('App Store', project.appStoreUrl!),
+      if (project.webUrl != null) link('Web app', project.webUrl!),
+      if (project.githubUrl != null) link('Source code', project.githubUrl!),
+    ];
+  }
+}
+
+class _InDevelopmentBanner extends StatelessWidget {
+  const _InDevelopmentBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return SizedBox(
+      height: 280,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.construction_rounded, size: 44, color: colors.accent),
+          const SizedBox(height: 12),
+          Text(
+            'Under development',
+            style: AppFonts.mono(size: 13, color: colors.textHint),
+          ),
+        ],
       ),
     );
   }

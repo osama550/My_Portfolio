@@ -70,14 +70,14 @@ class _ProjectGalleryViewerState extends State<ProjectGalleryViewer> {
                 initialScale: PhotoViewComputedScale.contained,
                 minScale: PhotoViewComputedScale.contained * 0.8,
                 maxScale: PhotoViewComputedScale.covered * 2.5,
-                heroAttributes: PhotoViewHeroAttributes(tag: widget.images[index]),
+                heroAttributes: PhotoViewHeroAttributes(
+                  tag: widget.images[index],
+                ),
               );
             },
             itemCount: widget.images.length,
             loadingBuilder: (context, event) => const Center(
-              child: CircularProgressIndicator(
-                color: ColorsPalette.primary,
-              ),
+              child: CircularProgressIndicator(color: ColorsPalette.primary),
             ),
             backgroundDecoration: const BoxDecoration(
               color: Colors.transparent,
@@ -103,7 +103,10 @@ class _ProjectGalleryViewerState extends State<ProjectGalleryViewer> {
                   children: [
                     // Index Counter Pill
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(20),
@@ -225,11 +228,7 @@ class _ProjectGalleryViewerState extends State<ProjectGalleryViewer> {
         child: InkWell(
           borderRadius: BorderRadius.circular(26),
           onTap: onPressed,
-          child: Icon(
-            icon,
-            size: 32,
-            color: Colors.white,
-          ),
+          child: Icon(icon, size: 32, color: Colors.white),
         ),
       ),
     );

@@ -1,61 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_portfolio/core/theme/app_colors.dart';
 import 'package:my_portfolio/core/theme/app_typography.dart';
 import 'package:my_portfolio/core/theme/breakpoints.dart';
 import 'package:my_portfolio/core/theme/color.dart';
 
 class AppTheme {
-  static ThemeData theme(DeviceType deviceType) {
+  static ThemeData light(DeviceType deviceType) =>
+      _build(deviceType, Brightness.light, AppColors.light);
+
+  static ThemeData dark(DeviceType deviceType) =>
+      _build(deviceType, Brightness.dark, AppColors.dark);
+
+  static ThemeData _build(
+    DeviceType deviceType,
+    Brightness brightness,
+    AppColors colors,
+  ) {
     final typography = switch (deviceType) {
       DeviceType.mobile => AppTypography.mobile,
       DeviceType.tablet => AppTypography.tablet,
       DeviceType.desktop => AppTypography.desktop,
     };
 
+    final colorScheme =
+        ColorScheme.fromSeed(
+          seedColor: ColorsPalette.primary,
+          brightness: brightness,
+        ).copyWith(
+          primary: colors.accent,
+          secondary: colors.accent,
+          onPrimary: ColorsPalette.onPrimary,
+          surface: colors.surface,
+          onSurface: colors.textPrimary,
+          error: ColorsPalette.error,
+        );
+
     return ThemeData(
       useMaterial3: true,
-      fontFamily: 'Poppins',
-      extensions: [typography],
+      brightness: brightness,
+      extensions: [typography, colors],
       primaryColor: ColorsPalette.primary,
-      scaffoldBackgroundColor: ColorsPalette.scaffoldBackground,
-      cardColor: ColorsPalette.card,
-      dividerColor: ColorsPalette.divider,
-      shadowColor: ColorsPalette.shadow,
-      hintColor: ColorsPalette.textHint,
-      highlightColor: ColorsPalette.primaryLight,
-      colorScheme: const ColorScheme.light(
-        primary: ColorsPalette.primary,
-        secondary: ColorsPalette.primary,
-        surface: ColorsPalette.surface,
-        error: ColorsPalette.error,
-        onPrimary: Colors.white,
-        onSurface: ColorsPalette.textPrimary,
-      ),
+      scaffoldBackgroundColor: colors.background,
+      cardColor: colors.surface,
+      dividerColor: colors.border,
+      shadowColor: colors.shadow,
+      hintColor: colors.textHint,
+      highlightColor: colors.accentTint,
+      colorScheme: colorScheme,
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: ColorsPalette.surface,
-        foregroundColor: ColorsPalette.textPrimary,
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
         centerTitle: true,
-        titleTextStyle: typography.h5Bold.copyWith(
-          color: ColorsPalette.textPrimary,
-        ),
+        titleTextStyle: typography.h5Bold.copyWith(color: colors.textPrimary),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: ColorsPalette.surface,
+        backgroundColor: colors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: ColorsPalette.surface,
-      ),
-      iconTheme: const IconThemeData(color: ColorsPalette.primary, size: 22),
+      bottomSheetTheme: BottomSheetThemeData(backgroundColor: colors.surface),
+      iconTheme: IconThemeData(color: colors.accent, size: 22),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 2,
-          shadowColor: ColorsPalette.shadow,
+          shadowColor: colors.shadow,
           backgroundColor: ColorsPalette.primary,
-          foregroundColor: ColorsPalette.textWhite,
-          disabledBackgroundColor: Color(0xFFE2E8F0),
-          disabledForegroundColor: Color(0xFF94A3B8),
+          foregroundColor: ColorsPalette.onPrimary,
+          disabledBackgroundColor: colors.surfaceRaised,
+          disabledForegroundColor: colors.textHint,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -64,94 +78,58 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: ColorsPalette.primary,
+          foregroundColor: colors.accent,
           textStyle: typography.bodySmallBold,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white,
-        hintStyle: typography.bodyMediumMedium.copyWith(
-          color: ColorsPalette.textHint,
-        ),
+        fillColor: colors.surface,
+        hintStyle: typography.bodyMediumMedium.copyWith(color: colors.textHint),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 18,
           vertical: 18,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: ColorsPalette.border),
+          borderSide: BorderSide(color: colors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: ColorsPalette.primary,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: colors.accent, width: 1.5),
         ),
       ),
       cardTheme: CardThemeData(
-        color: ColorsPalette.card,
+        color: colors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: ColorsPalette.border),
+          side: BorderSide(color: colors.border),
         ),
       ),
-      textTheme: textTheme(typography),
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(
+        _textTheme(typography, colors),
+      ),
     );
   }
 
-  static TextTheme textTheme(AppTypography typography) {
+  static TextTheme _textTheme(AppTypography t, AppColors c) {
     return TextTheme(
-      displayLarge: typography.h1Bold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-      displayMedium: typography.h2Bold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-      displaySmall: typography.h3Bold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-      headlineLarge: typography.h4Bold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-      headlineMedium: typography.h5Bold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-      headlineSmall: typography.h6Bold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-
-      titleLarge: typography.bodyXLargeBold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-      titleMedium: typography.bodyXLargeSemiBold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-      titleSmall: typography.bodyLargeBold.copyWith(
-        color: ColorsPalette.textPrimary,
-      ),
-
-      bodyLarge: typography.bodyLargeMedium.copyWith(
-        color: ColorsPalette.textSecondary,
-      ),
-      bodyMedium: typography.bodyMediumBold.copyWith(
-        color: ColorsPalette.textSecondary,
-      ),
-      bodySmall: typography.bodySmallBold.copyWith(
-        color: ColorsPalette.textSecondary,
-      ),
-
-      labelLarge: typography.bodyXSmallBold.copyWith(
-        color: ColorsPalette.textSecondary,
-      ),
-      labelMedium: typography.bodyXSmallMedium.copyWith(
-        color: ColorsPalette.textSecondary,
-      ),
-      labelSmall: typography.bodyXSmallRegular.copyWith(
-        color: ColorsPalette.textHint,
-      ),
+      displayLarge: t.h1Bold.copyWith(color: c.textPrimary),
+      displayMedium: t.h2Bold.copyWith(color: c.textPrimary),
+      displaySmall: t.h3Bold.copyWith(color: c.textPrimary),
+      headlineLarge: t.h4Bold.copyWith(color: c.textPrimary),
+      headlineMedium: t.h5Bold.copyWith(color: c.textPrimary),
+      headlineSmall: t.h6Bold.copyWith(color: c.textPrimary),
+      titleLarge: t.bodyXLargeBold.copyWith(color: c.textPrimary),
+      titleMedium: t.bodyXLargeSemiBold.copyWith(color: c.textPrimary),
+      titleSmall: t.bodyLargeBold.copyWith(color: c.textPrimary),
+      bodyLarge: t.bodyLargeMedium.copyWith(color: c.textSecondary),
+      bodyMedium: t.bodyMediumBold.copyWith(color: c.textSecondary),
+      bodySmall: t.bodySmallBold.copyWith(color: c.textSecondary),
+      labelLarge: t.bodyXSmallBold.copyWith(color: c.textSecondary),
+      labelMedium: t.bodyXSmallMedium.copyWith(color: c.textSecondary),
+      labelSmall: t.bodyXSmallRegular.copyWith(color: c.textHint),
     );
   }
 }

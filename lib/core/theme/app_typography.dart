@@ -187,39 +187,75 @@ class AppTypography extends ThemeExtension<AppTypography> {
   AppTypography lerp(ThemeExtension<AppTypography>? other, double t) {
     if (other is! AppTypography) return this;
     return AppTypography(
-      bodyMediumMedium:
-          TextStyle.lerp(bodyMediumMedium, other.bodyMediumMedium, t)!,
-      bodyLargeSemiBold:
-          TextStyle.lerp(bodyLargeSemiBold, other.bodyLargeSemiBold, t)!,
+      bodyMediumMedium: TextStyle.lerp(
+        bodyMediumMedium,
+        other.bodyMediumMedium,
+        t,
+      )!,
+      bodyLargeSemiBold: TextStyle.lerp(
+        bodyLargeSemiBold,
+        other.bodyLargeSemiBold,
+        t,
+      )!,
       bodyLargeBold: TextStyle.lerp(bodyLargeBold, other.bodyLargeBold, t)!,
       h6Bold: TextStyle.lerp(h6Bold, other.h6Bold, t)!,
-      bodyMediumSemiBold:
-          TextStyle.lerp(bodyMediumSemiBold, other.bodyMediumSemiBold, t)!,
-      bodyXSmallMedium:
-          TextStyle.lerp(bodyXSmallMedium, other.bodyXSmallMedium, t)!,
-      bodyXSmallRegular:
-          TextStyle.lerp(bodyXSmallRegular, other.bodyXSmallRegular, t)!,
+      bodyMediumSemiBold: TextStyle.lerp(
+        bodyMediumSemiBold,
+        other.bodyMediumSemiBold,
+        t,
+      )!,
+      bodyXSmallMedium: TextStyle.lerp(
+        bodyXSmallMedium,
+        other.bodyXSmallMedium,
+        t,
+      )!,
+      bodyXSmallRegular: TextStyle.lerp(
+        bodyXSmallRegular,
+        other.bodyXSmallRegular,
+        t,
+      )!,
       bodySmallBold: TextStyle.lerp(bodySmallBold, other.bodySmallBold, t)!,
       bodyMediumBold: TextStyle.lerp(bodyMediumBold, other.bodyMediumBold, t)!,
       h4Bold: TextStyle.lerp(h4Bold, other.h4Bold, t)!,
-      bodyMediumRegular:
-          TextStyle.lerp(bodyMediumRegular, other.bodyMediumRegular, t)!,
-      bodySmallMedium:
-          TextStyle.lerp(bodySmallMedium, other.bodySmallMedium, t)!,
-      bodyXLargeSemiBold:
-          TextStyle.lerp(bodyXLargeSemiBold, other.bodyXLargeSemiBold, t)!,
+      bodyMediumRegular: TextStyle.lerp(
+        bodyMediumRegular,
+        other.bodyMediumRegular,
+        t,
+      )!,
+      bodySmallMedium: TextStyle.lerp(
+        bodySmallMedium,
+        other.bodySmallMedium,
+        t,
+      )!,
+      bodyXLargeSemiBold: TextStyle.lerp(
+        bodyXLargeSemiBold,
+        other.bodyXLargeSemiBold,
+        t,
+      )!,
       h5Bold: TextStyle.lerp(h5Bold, other.h5Bold, t)!,
-      bodyLargeMedium:
-          TextStyle.lerp(bodyLargeMedium, other.bodyLargeMedium, t)!,
-      bodyLargeRegular:
-          TextStyle.lerp(bodyLargeRegular, other.bodyLargeRegular, t)!,
-      bodyXLargeMedium:
-          TextStyle.lerp(bodyXLargeMedium, other.bodyXLargeMedium, t)!,
+      bodyLargeMedium: TextStyle.lerp(
+        bodyLargeMedium,
+        other.bodyLargeMedium,
+        t,
+      )!,
+      bodyLargeRegular: TextStyle.lerp(
+        bodyLargeRegular,
+        other.bodyLargeRegular,
+        t,
+      )!,
+      bodyXLargeMedium: TextStyle.lerp(
+        bodyXLargeMedium,
+        other.bodyXLargeMedium,
+        t,
+      )!,
       bodyXSmallBold: TextStyle.lerp(bodyXSmallBold, other.bodyXSmallBold, t)!,
       h3Bold: TextStyle.lerp(h3Bold, other.h3Bold, t)!,
       h1Bold: TextStyle.lerp(h1Bold, other.h1Bold, t)!,
-      bodyXSmallSemiBold:
-          TextStyle.lerp(bodyXSmallSemiBold, other.bodyXSmallSemiBold, t)!,
+      bodyXSmallSemiBold: TextStyle.lerp(
+        bodyXSmallSemiBold,
+        other.bodyXSmallSemiBold,
+        t,
+      )!,
       h2Bold: TextStyle.lerp(h2Bold, other.h2Bold, t)!,
       bodyXLargeBold: TextStyle.lerp(bodyXLargeBold, other.bodyXLargeBold, t)!,
     );
