@@ -29,11 +29,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/images/shalehi/
-    - assets/images/hirsto/
-    - assets/images/chalets_admin_booking/
+    - assets/images/projects/
     - assets/icons/
-    - assets/images/salons/
-    - assets/images/resturants/
-    - assets/images/cars_show_room/
-    - assets/images/tablet_catalog/

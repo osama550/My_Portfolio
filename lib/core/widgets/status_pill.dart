@@ -8,11 +8,13 @@ class StatusPill extends StatelessWidget {
     this.label, {
     super.key,
     this.background,
+    this.dotColor = ColorsPalette.success,
     this.padding = const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
   });
 
   final String label;
   final Color? background;
+  final Color dotColor;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -31,12 +33,10 @@ class StatusPill extends StatelessWidget {
           Container(
             width: 7,
             height: 7,
-            decoration: const BoxDecoration(
-              color: ColorsPalette.success,
+            decoration: BoxDecoration(
+              color: dotColor,
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(color: ColorsPalette.success, blurRadius: 8),
-              ],
+              boxShadow: [BoxShadow(color: dotColor, blurRadius: 8)],
             ),
           ),
           const SizedBox(width: 8),

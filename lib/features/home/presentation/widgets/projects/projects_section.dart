@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/widgets/header_title_sections.dart';
-import 'package:my_portfolio/core/widgets/responsive_grid.dart';
 import 'package:my_portfolio/features/home/data/models/project_model.dart';
 
 import 'project_card.dart';
@@ -10,9 +9,6 @@ class ProjectsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final featured = projectsList.where((p) => p.featured).toList();
-    final compact = projectsList.where((p) => !p.featured).toList();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,20 +16,13 @@ class ProjectsSection extends StatelessWidget {
           eyebrow: 'Portfolio',
           title: 'Selected work',
           subtitle:
-              'Production apps across booking, ordering and healthcare — what each one needed and what I built.',
+              'Booking, ordering, healthcare and education products — what each one needed and what I built.',
         ),
         const SizedBox(height: 36),
-        ResponsiveGrid(
-          minItemWidth: 440,
-          children: [
-            for (final p in featured) ProjectCard(project: p, featured: true),
-          ],
-        ),
-        const SizedBox(height: 20),
-        ResponsiveGrid(
-          minItemWidth: 300,
-          children: [for (final p in compact) ProjectCard(project: p)],
-        ),
+        for (var i = 0; i < projectsList.length; i++) ...[
+          if (i > 0) const SizedBox(height: 28),
+          ProjectCard(project: projectsList[i]),
+        ],
       ],
     );
   }

@@ -1,37 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/core/theme/app_fonts.dart';
+import 'package:my_portfolio/core/theme/color.dart';
 import 'package:my_portfolio/core/utils/extensions/context_extension.dart';
 import 'package:my_portfolio/core/utils/functions/url_launcher.dart';
 import 'package:my_portfolio/core/widgets/app_button.dart';
 import 'package:my_portfolio/core/widgets/mono_tag.dart';
+import 'package:my_portfolio/core/widgets/status_pill.dart';
 import 'package:my_portfolio/features/home/data/models/project_model.dart';
 
-import 'project_image_carousel.dart';
+import 'project_showcase_gallery.dart';
 
-class ProjectCard extends StatefulWidget {
+/// Full-width case study: showcase slides on top, then what the product is,
+/// what I built and the stack.
+class ProjectCard extends StatelessWidget {
   final ProjectModel project;
-  final bool featured;
 
-  const ProjectCard({super.key, required this.project, this.featured = false});
+  const ProjectCard({super.key, required this.project});
 
   @override
-  State<ProjectCard> createState() => _ProjectCardState();
+  Widget build(BuildContext context) {
+    final inset = context.fluid(10, 1.4, 14);
+    return _HoverCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(inset, inset, inset, 0),
+            child: ProjectShowcaseGallery(
+              title: project.title,
+              showcases: project.showcases,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(context.fluid(20, 3, 32)),
+            child: _ProjectDetails(project: project),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _ProjectCardState extends State<ProjectCard> {
+/// Owns the hover state so hovering never rebuilds the card's content.
+class _HoverCard extends StatefulWidget {
+  final Widget child;
+
+  const _HoverCard({required this.child});
+
+  @override
+  State<_HoverCard> createState() => _HoverCardState();
+}
+
+class _HoverCardState extends State<_HoverCard> {
   bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final project = widget.project;
-    final featured = widget.featured;
-    final inset = featured ? 14.0 : 12.0;
-    final tags = featured ? project.tags : project.tags.take(4).toList();
-    final detailPadding = featured
-        ? EdgeInsets.all(context.fluid(20, 3, 28))
-        : const EdgeInsets.fromLTRB(14, 6, 14, 14);
-
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -41,121 +66,93 @@ class _ProjectCardState extends State<ProjectCard> {
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: colors.surface,
-          borderRadius: BorderRadius.circular(featured ? 22 : 20),
+          borderRadius: BorderRadius.circular(22),
           border: Border.all(
             color: _isHovered ? colors.borderHover : colors.border,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(inset, inset, inset, 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(featured ? 14 : 12),
-                child: ColoredBox(
-                  color: colors.surfaceMuted,
-                  child: project.inDevelopment
-                      ? const _InDevelopmentBanner()
-                      : ProjectImageCarousel(images: project.images),
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+class _ProjectDetails extends StatelessWidget {
+  final ProjectModel project;
+
+  const _ProjectDetails({required this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final header = _Header(project: project);
+    final description = Text(
+      project.description,
+      style: TextStyle(
+        fontSize: 15.5,
+        height: 1.6,
+        color: colors.textSecondary,
+      ),
+    );
+    final built = _Labeled(
+      label: 'What I built',
+      child: _Bullets(bullets: project.bullets),
+    );
+    final stack = _Labeled(
+      label: 'Stack',
+      child: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [for (final tag in project.tags) MonoTag(tag)],
+      ),
+    );
+    final links = _links(project);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= 720) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    header,
+                    const SizedBox(height: 14),
+                    description,
+                    const SizedBox(height: 22),
+                    stack,
+                    if (links.isNotEmpty) ...[
+                      const SizedBox(height: 24),
+                      Wrap(spacing: 10, runSpacing: 10, children: links),
+                    ],
+                  ],
                 ),
               ),
-            ),
-            Padding(
-              padding: detailPadding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        project.categoryIcon,
-                        size: 14,
-                        color: colors.accent,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          project.category,
-                          style: AppFonts.mono(
-                            size: 11.5,
-                            color: colors.textHint,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  Text(
-                    project.title,
-                    style: TextStyle(
-                      fontSize: featured ? 26 : 20,
-                      fontWeight: FontWeight.w700,
-                      height: featured ? 1.15 : 1.25,
-                      letterSpacing: featured ? -0.39 : 0,
-                      color: colors.heading,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  Text(
-                    project.description,
-                    style: TextStyle(
-                      fontSize: featured ? 15.5 : 14.5,
-                      height: 1.6,
-                      color: featured ? colors.textSecondary : colors.textMuted,
-                    ),
-                  ),
-                  if (project.bullets.isNotEmpty) ...[
-                    const SizedBox(height: 14),
-                    for (final bullet in project.bullets)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '—',
-                              style: TextStyle(
-                                fontSize: 14.5,
-                                height: 1.5,
-                                color: colors.accent,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                bullet,
-                                style: TextStyle(
-                                  fontSize: 14.5,
-                                  height: 1.5,
-                                  color: colors.textMuted,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                  const SizedBox(height: 14),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: [for (final tag in tags) MonoTag(tag)],
-                  ),
-                  if (_links(project).isNotEmpty) ...[
-                    const SizedBox(height: 22),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: _links(project),
-                    ),
-                  ],
-                ],
-              ),
-            ),
+              const SizedBox(width: 40),
+              Expanded(flex: 4, child: built),
+            ],
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            header,
+            const SizedBox(height: 14),
+            description,
+            const SizedBox(height: 22),
+            built,
+            const SizedBox(height: 20),
+            stack,
+            if (links.isNotEmpty) ...[
+              const SizedBox(height: 22),
+              Wrap(spacing: 10, runSpacing: 10, children: links),
+            ],
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -178,26 +175,126 @@ class _ProjectCardState extends State<ProjectCard> {
   }
 }
 
-class _InDevelopmentBanner extends StatelessWidget {
-  const _InDevelopmentBanner();
+class _Header extends StatelessWidget {
+  final ProjectModel project;
+
+  const _Header({required this.project});
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    return SizedBox(
-      height: 280,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.construction_rounded, size: 44, color: colors.accent),
-          const SizedBox(height: 12),
-          Text(
-            'Under development',
-            style: AppFonts.mono(size: 13, color: colors.textHint),
+    final titleSize = context.fluid(22, 2.8, 28);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(project.categoryIcon, size: 14, color: colors.accent),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                project.category,
+                style: AppFonts.mono(size: 11.5, color: colors.textHint),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Wrap(
+          spacing: 12,
+          runSpacing: 10,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(
+              project.title,
+              style: TextStyle(
+                fontSize: titleSize,
+                fontWeight: FontWeight.w700,
+                height: 1.15,
+                letterSpacing: -titleSize * 0.015,
+                color: colors.heading,
+              ),
+            ),
+            if (project.inDevelopment)
+              const StatusPill(
+                'In development',
+                dotColor: ColorsPalette.warning,
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _Labeled extends StatelessWidget {
+  final String label;
+  final Widget child;
+
+  const _Labeled({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: AppFonts.mono(
+            size: 11.5,
+            color: colors.textHint,
+            letterSpacing: 0.72,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 12),
+        child,
+      ],
+    );
+  }
+}
+
+class _Bullets extends StatelessWidget {
+  final List<String> bullets;
+
+  const _Bullets({required this.bullets});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final bullet in bullets)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '—',
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    height: 1.55,
+                    color: colors.accent,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    bullet,
+                    style: TextStyle(
+                      fontSize: 14.5,
+                      height: 1.55,
+                      color: colors.textMuted,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

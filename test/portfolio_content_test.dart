@@ -1,9 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_portfolio/features/home/data/models/project_model.dart';
 import 'package:my_portfolio/features/home/data/models/work_experience_model.dart';
 
 void main() {
   group('projectsList', () {
+    test('lists the four projects in display order', () {
+      expect(projectsList.map((p) => p.id), [
+        'barq_platform',
+        'shalehi',
+        'hirsto',
+        'german_learning',
+      ]);
+    });
+
     test('has unique ids', () {
       final ids = projectsList.map((p) => p.id).toSet();
       expect(ids.length, projectsList.length);
@@ -24,28 +35,53 @@ void main() {
         );
       }
     });
+  });
 
-    test('image paths are generated sequentially', () {
-      final shalehi = projectsList.firstWhere((p) => p.id == 'shalehi');
-      expect(shalehi.images.first, 'assets/images/shalehi/1.webp');
+  group('showcases', () {
+    test('every project has at least one showcase', () {
+      for (final project in projectsList) {
+        expect(project.showcases, isNotEmpty, reason: project.id);
+      }
     });
 
-    test('image paths end at imageCount', () {
-      final shalehi = projectsList.firstWhere((p) => p.id == 'shalehi');
-      expect(shalehi.images.last, 'assets/images/shalehi/22.webp');
+    test('images sit directly in the asset folder declared in pubspec', () {
+      for (final project in projectsList) {
+        for (final image in project.images) {
+          expect(File(image).parent.path, 'assets/images/projects');
+        }
+      }
+    });
+
+    test('image files exist on disk', () {
+      for (final project in projectsList) {
+        for (final image in project.images) {
+          expect(File(image).existsSync(), isTrue, reason: image);
+        }
+      }
+    });
+
+    test('labels are unique within a project', () {
+      for (final project in projectsList) {
+        final labels = project.showcases.map((s) => s.label).toSet();
+        expect(labels.length, project.showcases.length, reason: project.id);
+      }
+    });
+
+    test('images keep the showcase order', () {
+      final barq = projectsList.firstWhere((p) => p.id == 'barq_platform');
+      expect(barq.images, [
+        'assets/images/projects/barq_overview.webp',
+        'assets/images/projects/barq_customer_app.webp',
+        'assets/images/projects/barq_vendor_tablet.webp',
+      ]);
     });
   });
 
   group('inDevelopment projects', () {
-    test('have no screenshots', () {
-      for (final project in projectsList.where((p) => p.inDevelopment)) {
-        expect(project.images, isEmpty, reason: project.id);
-      }
-    });
-
-    test('include the German Learning Platform', () {
-      final german = projectsList.firstWhere((p) => p.id == 'german_learning');
-      expect(german.inDevelopment, isTrue);
+    test('only the German Learning Platform is in development', () {
+      expect(projectsList.where((p) => p.inDevelopment).map((p) => p.id), [
+        'german_learning',
+      ]);
     });
   });
 
