@@ -22,7 +22,7 @@ class App extends StatelessWidget {
             themeMode: themeMode,
             routerConfig: AppRouter.router,
             debugShowCheckedModeBanner: false,
-            title: 'my_portfolio',
+            title: 'Osama Kamel | Flutter Developer',
             locale: const Locale('en'),
           ),
         ),
